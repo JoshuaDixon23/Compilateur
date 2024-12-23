@@ -1,0 +1,8 @@
+MAIN()
+VAR a;
+VAR x;
+DEBUT
+TQ a FAIRE
+    x <- x + 1;
+FINTQ
+FIN
