@@ -3,10 +3,18 @@
 extern ts TABSYMB;
 int PILE = 1;
 extern char CTXT[32];
-static void codegenNB(ast * p);
 
-void codegen(ast * p){
-    switch(p->type){
+// Prototypes des fonctions spécifiques
+static void codegenNB(ast * p);
+static void codegenOP(ast * p);
+static void codegenID(ast * p);
+static void codegenAFF(ast * p);
+static void codegenLEXP(ast * p);
+static void codegenTQ(ast * p);
+static void codegenFonction(ast * p);
+
+void codegen(ast * p) {
+    switch (p->type) {
         case AST_NB:
             codegenNB(p);
             break;
@@ -19,45 +27,91 @@ void codegen(ast * p){
         case AST_AFF:
             codegenAFF(p);
             break;
+        case AST_LEXP:
+            codegenLEXP(p);
+            break;
+        case AST_TQ:
+            codegenTQ(p);
+            break;
+        case AST_FONCTION:
+            codegenFonction(p);
+            break;
         default:
-            // gestion d'erreur exit(1)
-        break;
+            fprintf(stderr, "Type AST inconnu : %d\n", p->type);
+            break;
     }
 }
 
-void codegenNB(ast * p){
-    fprintf(out,"LOAD #%d\n", p->valeur );
+static void codegenNB(ast * p) {
+    fprintf(out, "LOAD #%d\n", p->valeur);
 }
 
-void codegenOP(ast * p){
+static void codegenOP(ast * p) {
     codegen(p->suivant[0]);
     codegen(p->suivant[1]);
     DEPILER();
-    switch(p->op){
+    switch (p->op) {
         case '+':
-            fprintf(out,"ADD ");
+            fprintf(out, "ADD\n");
+            break;
+        case '-':
+            fprintf(out, "SUB\n");
+            break;
+        case '*':
+            fprintf(out, "MUL\n");
+            break;
+        case '/':
+            fprintf(out, "DIV\n");
             break;
         default:
-            // gestion nonetype op 
+            fprintf(stderr, "Opérateur inconnu : %c\n", p->op);
             break;
     }
-    ADR_SOMMET_PILE();
-    fprintf(out,"LOAD #%s\n", "value a determiner");
-}
-
-void codegenID(ast * p){
-    int adr, i;
-    i = ts_recherche_id(TABSYMB, CTXT, p->id); // si i pas trouver alors p->id pas initialiser
-    adr = TABSYMB[i].adresse + NB_REGISTRE;
-    fprintf(out,"i: %d adr : %d\n", i, adr);
-    fprintf(out, "LOAD %d\n", adr);
     EMPILER();
 }
 
-void codegenAFF(ast * p){
-    codegen(p->suivant[0]); // Exp dans la pile
+static void codegenID(ast * p) {
+    int index = ts_recherche_id(TABSYMB, CTXT, p->id);
+    if (index < 0) {
+        fprintf(stderr, "Erreur : Identifiant '%s' non trouvé dans le contexte '%s'\n", p->id, CTXT);
+        return;
+    }
+    int adresse = TABSYMB[index].adresse + NB_REGISTRE;
+    fprintf(out, "LOAD %d\n", adresse);
+    EMPILER();
+}
+
+static void codegenAFF(ast * p) {
+    codegen(p->suivant[0]); // Génère le code pour l'expression assignée
     DEPILER();
-    int i = ts_recherche_id(TABSYMB, CTXT, p->id);
-    fprintf(out,"STORE %d\n", TABSYMB[i].adresse + NB_REGISTRE);
-    EMPILER();
+    int index = ts_recherche_id(TABSYMB, CTXT, p->id);
+    if (index < 0) {
+        fprintf(stderr, "Erreur : Identifiant '%s' non trouvé dans le contexte '%s'\n", p->id, CTXT);
+        return;
+    }
+    fprintf(out, "STORE %d\n", TABSYMB[index].adresse + NB_REGISTRE);
+}
+
+static void codegenLEXP(ast * p) {
+    codegen(p->suivant[0]);
+    if (p->suivant[1]) {
+        codegen(p->suivant[1]);
+    }
+}
+
+static void codegenTQ(ast * p) {
+    // a reprendre 
+    codegen(p->suivant[0]); // Condition
+    fprintf(out, "JUMP %d\n", 1);
+    codegen(p->suivant[1]); // Corps de la boucle
+    fprintf(out, "JUMP LABEL%d\n", 2);
+    fprintf(out, "LABEL%d:\n", 2);
+    //
+}
+
+static void codegenFonction(ast * p) {
+    fprintf(out, "FUNC %s:\n", p->id);
+    codegen(p->suivant[0]); // Paramètres ou déclarations locales
+    codegen(p->suivant[1]); // Corps de la fonction
+    fprintf(out, "END_FUNC\n");
 }

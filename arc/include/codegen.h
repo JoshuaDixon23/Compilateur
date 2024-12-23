@@ -26,9 +26,6 @@ extern FILE * out;
 extern int PILE;
 
 void codegen(ast * p);
-void codegenOP(ast * p);
-void codegenID(ast * p);
-void codegenAFF(ast * p);
 
 #define EMPILER(){                     \
     fprintf(out, "STORE @%d\n", 3); \

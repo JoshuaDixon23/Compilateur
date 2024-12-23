@@ -5,6 +5,8 @@
   
   #include "ast.h"
   #include "ts.h"
+  #include "codegen.h"
+  #include "semantic.h"
     
   extern int yylex();
   static void print_file_error(char * s, char *errmsg);
@@ -56,7 +58,7 @@ PROGRAMME:L_FONCTION
           DECLA_VAR
           DEBUT 
             L_EXP
-          FIN {PrintAst($7);}
+          FIN {semantic($7); PrintAst($7);  codegen($7);}
           ;
 
 DECLA_VAR: %empty

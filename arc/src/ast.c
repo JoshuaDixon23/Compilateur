@@ -129,16 +129,19 @@ static void PrintNB(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_GREEN "Feuille:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
   printf("%s" TXT_BOLD "Valeur: " TXT_NULL "%d\n",indent, p->valeur);
+  printf("%s" TXT_BOLD "Codelen: " TXT_NULL "%d\n",indent, p->codelen);
 }
 static void PrintID(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_GREEN "Feuille:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
   printf("%s" TXT_BOLD "ID: " TXT_NULL "%s\n",indent, p->id);
+  printf("%s" TXT_BOLD "Codelen: " TXT_NULL "%d\n",indent, p->codelen);
 }
 static void PrintOP(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_BLUE "Noeud:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
   printf("%s" TXT_BOLD "Operateur: " TXT_NULL "%d\n",indent, p->op);
+  printf("%s" TXT_BOLD "Codelen: " TXT_NULL "%d\n",indent, p->codelen);
   profondeur++;
   PrintAst(p->suivant[0]);
   PrintAst(p->suivant[1]);
@@ -148,13 +151,15 @@ static void PrintAFF(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_BLUE "Noeud:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
   printf("%s" TXT_BOLD "ID:   " TXT_NULL "%s\n",indent, p->id);
+  printf("%s" TXT_BOLD "Codelen: " TXT_NULL "%d\n",indent, p->codelen);
   profondeur++;
-  PrintAst(p->suivant[1]);
+  PrintAst(p->suivant[0]);
   profondeur--;
 }
 static void PrintLEXP(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_RED "EXP:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
+  printf("%s" TXT_BOLD "Codelen: " TXT_NULL "%d\n",indent, p->codelen);
   profondeur++;
   PrintAst(p->suivant[0]);
   PrintAst(p->suivant[1]);
@@ -163,6 +168,7 @@ static void PrintLEXP(ast *p, char *indent){
 static void PrintTQ(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_BLUE "TQ:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
+  printf("%s" TXT_BOLD "Codelen: " TXT_NULL "%d\n",indent, p->codelen);
   profondeur++;
   PrintAst(p->suivant[0]);
   PrintAst(p->suivant[1]);
@@ -171,7 +177,8 @@ static void PrintTQ(ast *p, char *indent){
 static void PrintFONCTION(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_RED "FONCTION:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
-    printf("%s" TXT_BOLD "ID:   " TXT_NULL "%s\n",indent, p->id);
+  printf("%s" TXT_BOLD "ID:   " TXT_NULL "%s\n",indent, p->id);
+  printf("%s" TXT_BOLD "Codelen: " TXT_NULL "%d\n",indent, p->codelen);
   profondeur++;
   PrintAst(p->suivant[0]);
   PrintAst(p->suivant[1]);
