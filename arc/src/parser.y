@@ -48,7 +48,7 @@
 %token TQ FAIRE FINTQ
 %token <nb> NB 
 %token <id> ID
-%token '>' '<' '=' DIFFERENT
+%token '>' '<' '=' '!'
 %left '+' '-' 
 %left '*' '/'
 %start PROGRAMME
@@ -79,7 +79,7 @@ STRUCT_TQ: TQ CONDITION FAIRE
 CONDITION: EXP '>' EXP {$$ = CreerNoeudCondition('>', $1, $3);}
          | EXP '<' EXP {$$ = CreerNoeudCondition('<', $1, $3);}
          | EXP '=' EXP {$$ = CreerNoeudCondition('=', $1, $3);}
-         | EXP DIFFERENT EXP {$$ = CreerNoeudCondition('!', $1, $3);}
+         | EXP '!' EXP {$$ = CreerNoeudCondition('!', $1, $3);}
          ;
 
 EXP : EXP '+' EXP {$$ = CreerNoeudOP('+', $1, $3);}

@@ -141,7 +141,7 @@ enum yysymbol_kind_t
   YYSYMBOL_18_ = 18,                       /* '>'  */
   YYSYMBOL_19_ = 19,                       /* '<'  */
   YYSYMBOL_20_ = 20,                       /* '='  */
-  YYSYMBOL_DIFFERENT = 21,                 /* DIFFERENT  */
+  YYSYMBOL_21_ = 21,                       /* '!'  */
   YYSYMBOL_22_ = 22,                       /* '+'  */
   YYSYMBOL_23_ = 23,                       /* '-'  */
   YYSYMBOL_24_ = 24,                       /* '*'  */
@@ -499,7 +499,7 @@ union yyalloc
 #define YYNSTATES  64
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   269
+#define YYMAXUTOK   268
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -516,7 +516,7 @@ static const yytype_int8 yytranslate[] =
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,    21,     2,     2,     2,     2,     2,     2,
        4,     5,    24,    22,     7,    23,     2,    25,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     6,
       19,    20,    18,     2,     2,     2,     2,     2,     2,     2,
@@ -539,7 +539,7 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     8,
-       9,    10,    11,    12,    13,    14,    15,    16,    17,    21
+       9,    10,    11,    12,    13,    14,    15,    16,    17
 };
 
 #if YYDEBUG
@@ -567,7 +567,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
   {
   "end of file", "error", "invalid token", "MAIN", "'('", "')'", "';'",
   "','", "ALGO", "VAR", "AFFECT", "DEBUT", "FIN", "TQ", "FAIRE", "FINTQ",
-  "NB", "ID", "'>'", "'<'", "'='", "DIFFERENT", "'+'", "'-'", "'*'", "'/'",
+  "NB", "ID", "'>'", "'<'", "'='", "'!'", "'+'", "'-'", "'*'", "'/'",
   "$accept", "PROGRAMME", "DECLA_VAR", "L_EXP", "STRUCT_TQ", "CONDITION",
   "EXP", "L_PARAM", "L_ID", "FONCTION", "L_FONCTION", YY_NULLPTR
   };
@@ -1537,9 +1537,9 @@ yyreduce:
 #line 1538 "src/parser.c"
     break;
 
-  case 13: /* CONDITION: EXP DIFFERENT EXP  */
+  case 13: /* CONDITION: EXP '!' EXP  */
 #line 82 "src/parser.y"
-                             {(yyval.arbre) = CreerNoeudCondition('!', (yyvsp[-2].arbre), (yyvsp[0].arbre));}
+                       {(yyval.arbre) = CreerNoeudCondition('!', (yyvsp[-2].arbre), (yyvsp[0].arbre));}
 #line 1544 "src/parser.c"
     break;
 

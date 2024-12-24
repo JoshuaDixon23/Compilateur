@@ -1,7 +1,7 @@
 #include "codegen.h"
 
 extern ts TABSYMB;
-int PILE = 1;
+int ligne_act = 0;
 extern char CTXT[32];
 
 // Prototypes des fonctions spécifiques
@@ -48,12 +48,15 @@ void codegen(ast * p) {
 
 static void codegenNB(ast * p) {
     fprintf(out, "LOAD #%d\n", p->valeur);
+    EMPILER();
+    ligne_act = ligne_act + 3;
 }
 
 static void codegenOP(ast * p) {
     codegen(p->suivant[0]);
     codegen(p->suivant[1]);
     DEPILER();
+    fprintf(out, "DEC 3 \n");
     switch (p->op) {
         case '+':
             fprintf(out, "ADD ");
@@ -71,7 +74,9 @@ static void codegenOP(ast * p) {
             fprintf(stderr, "Opérateur inconnu : %c\n", p->op);
             break;
     }
+    fprintf(out, "@3 \n");
     EMPILER();
+    ligne_act = ligne_act + 6;
 }
 
 static void codegenID(ast * p) {
@@ -83,6 +88,7 @@ static void codegenID(ast * p) {
     int adresse = TABSYMB[index].adresse + NB_REGISTRE;
     fprintf(out, "LOAD %d\n", adresse);
     EMPILER();
+    ligne_act = ligne_act + 3;
 }
 
 static void codegenAFF(ast * p) {
@@ -94,6 +100,7 @@ static void codegenAFF(ast * p) {
         return;
     }
     fprintf(out, "STORE %d\n", TABSYMB[index].adresse + NB_REGISTRE);
+    ligne_act = ligne_act + 3;
 }
 
 static void codegenLEXP(ast * p) {
@@ -104,12 +111,11 @@ static void codegenLEXP(ast * p) {
 }
 
 static void codegenTQ(ast * p) {
-    // a reprendre 
+    int debut_tq = ligne_act;
     codegen(p->suivant[0]); // Condition
-    fprintf(out, "JUMP %d\n", p->codelen); 
     codegen(p->suivant[1]); // Corps de la boucle
-    fprintf(out, "JUMP %d\n", 1);
-    //
+    fprintf(out, "JUMP %d\n", debut_tq); 
+    ligne_act = ligne_act + 1;
 }
 
 static void codegenFonction(ast * p) {
@@ -118,28 +124,36 @@ static void codegenFonction(ast * p) {
     codegen(p->suivant[0]); // Paramètres ou déclarations locales
     codegen(p->suivant[1]); // Corps de la fonction
     fprintf(out, "END_FUNC\n");
+    ligne_act = ligne_act + 2;
 }
 
 static void codegenCondition(ast * p){
     codegen(p->suivant[0]);
     codegen(p->suivant[1]);
-    DEPILER();
+    // ex : 1 = 2
+    DEPILER();                 // 2
+    fprintf(out, "DEC 3 \n");
+    fprintf(out, "SUB @3\n");  // 2 - 1 = 1
     switch (p->op) {
-        case '<':
-            fprintf(out, "ADD ");
-            break;
-        case '>':
-            fprintf(out, "SUB ");
-            break;
-        case '=':
-            fprintf(out, "MUL ");
-            break;
-        case '!=':
-            fprintf(out, "DIV ");
-            break;
-        default:
-            fprintf(stderr, "Opérateur inconnu : %c\n", p->op);
-            break;
-    }
-    EMPILER();
+            case '<': 
+                fprintf(out, "JUMG %d\n", p->codelen);  // Saut si ACC > 0
+                fprintf(out, "NOP\n"); // Pour compenser le = 
+                break;
+            case '>': 
+                fprintf(out, "JUML %d\n", p->codelen);  // Saut si ACC < 0
+                fprintf(out, "NOP\n"); // Pour compenser le = 
+                break;
+            case '=': 
+                fprintf(out, "JUMG %d\n", p->codelen);  // Saut si ACC > 0
+                fprintf(out, "JUML %d\n", p->codelen);  // Saut si ACC < 0
+                break;
+            case '!': 
+                fprintf(out, "JUMZ %d\n", p->codelen);  // Saut si ACC == 0
+                fprintf(out, "NOP\n"); // Pour compenser le = 
+                break;
+            default:
+                fprintf(stderr, "Opérateur inconnu : %c\n", p->op);
+                break;
+        }
+    ligne_act = ligne_act + 6;
 }

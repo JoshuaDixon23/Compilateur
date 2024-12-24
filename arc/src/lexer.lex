@@ -43,8 +43,7 @@ CONDITION       ()
 "FINTQ" {return FINTQ;}
 "ALGO" {return ALGO;}
 "<-" {return AFFECT;}
-"!=" {return DIFFERENT;}
-[-+%*(/);=<>] {return yytext[0];}
+[-+%*(/);=<>!] {return yytext[0];}
 {NOMBRE}        { yylval.nb = atoi(yytext); return NB; }
 {ID} {strcpy(yylval.id, yytext);return ID;}
 [ \t\r\n]+ {} 
