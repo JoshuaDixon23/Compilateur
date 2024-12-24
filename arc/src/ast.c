@@ -7,6 +7,7 @@ static void PrintLEXP(ast *p, char *indent);
 static void PrintAFF(ast *p, char *indent);
 static void PrintTQ(ast *p, char *indent);
 static void PrintFONCTION(ast *p, char *indent);
+static void PrintCONDITION(ast *p, char *indent);
 int profondeur = 0;
 
 ast * CreerFeuilleNB(int nb){
@@ -78,6 +79,16 @@ ast * CreerNoeudAFF(char * id, ast * p1){
   p->suivant[0] = p1;
   return p;
 }
+ast * CreerNoeudCondition(int operateur, ast * p1, ast * p2){
+  ast * p;
+  INIT_NOEUD(p);
+  p->type = AST_CONDITION;
+  strcpy(p->type_str,"CONDITION");
+  p->op = operateur;
+  p->suivant[0] = p1;
+  p->suivant[1] = p2;
+  return p;
+}
 
 void FreeAst(ast * p){
   if (p == NULL) return;
@@ -113,6 +124,9 @@ void PrintAst(ast * p){
     break;
   case AST_TQ:
     PrintTQ(p, indent);
+    break;
+  case AST_CONDITION:
+    PrintCONDITION(p, indent);
     break;
   default:
     fprintf(stderr,"[Erreur] type <%d>: %s non reconnu\n",p->type,p->type_str);
@@ -168,6 +182,16 @@ static void PrintLEXP(ast *p, char *indent){
 static void PrintTQ(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_BLUE "TQ:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
+  printf("%s" TXT_BOLD "Codelen: " TXT_NULL "%d\n",indent, p->codelen);
+  profondeur++;
+  PrintAst(p->suivant[0]);
+  PrintAst(p->suivant[1]);
+  profondeur--;
+}
+static void PrintCONDITION(ast *p, char *indent){
+  printf("%s" TXT_BOLD TXT_BLUE "CONDITION:  " TXT_NULL "%p\n",indent, p);
+  printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
+  printf("%s" TXT_BOLD "OP:   " TXT_NULL "%d\n",indent, p->op);
   printf("%s" TXT_BOLD "Codelen: " TXT_NULL "%d\n",indent, p->codelen);
   profondeur++;
   PrintAst(p->suivant[0]);

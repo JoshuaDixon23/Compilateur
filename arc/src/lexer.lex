@@ -31,7 +31,7 @@
 %option yylineno
 
 NOMBRE          ([1-9][0-9]*|0)
-ID              ([a-zA-Z]+)
+ID              ([a-zA-Z][a-zA-Z]*)
 CONDITION       ()
 %%
 "MAIN" {return MAIN;}
@@ -43,7 +43,8 @@ CONDITION       ()
 "FINTQ" {return FINTQ;}
 "ALGO" {return ALGO;}
 "<-" {return AFFECT;}
-[-+%*(/);] {return yytext[0];}
+"!=" {return DIFFERENT;}
+[-+%*(/);=<>] {return yytext[0];}
 {NOMBRE}        { yylval.nb = atoi(yytext); return NB; }
 {ID} {strcpy(yylval.id, yytext);return ID;}
 [ \t\r\n]+ {} 

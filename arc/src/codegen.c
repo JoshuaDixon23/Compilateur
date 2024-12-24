@@ -12,6 +12,7 @@ static void codegenAFF(ast * p);
 static void codegenLEXP(ast * p);
 static void codegenTQ(ast * p);
 static void codegenFonction(ast * p);
+static void codegenCondition(ast * p);
 
 void codegen(ast * p) {
     switch (p->type) {
@@ -36,6 +37,9 @@ void codegen(ast * p) {
         case AST_FONCTION:
             codegenFonction(p);
             break;
+        case AST_CONDITION:
+            codegenCondition(p);
+            break;
         default:
             fprintf(stderr, "Type AST inconnu : %d\n", p->type);
             break;
@@ -52,16 +56,16 @@ static void codegenOP(ast * p) {
     DEPILER();
     switch (p->op) {
         case '+':
-            fprintf(out, "ADD\n");
+            fprintf(out, "ADD ");
             break;
         case '-':
-            fprintf(out, "SUB\n");
+            fprintf(out, "SUB ");
             break;
         case '*':
-            fprintf(out, "MUL\n");
+            fprintf(out, "MUL ");
             break;
         case '/':
-            fprintf(out, "DIV\n");
+            fprintf(out, "DIV ");
             break;
         default:
             fprintf(stderr, "Opérateur inconnu : %c\n", p->op);
@@ -102,16 +106,40 @@ static void codegenLEXP(ast * p) {
 static void codegenTQ(ast * p) {
     // a reprendre 
     codegen(p->suivant[0]); // Condition
-    fprintf(out, "JUMP %d\n", 1);
+    fprintf(out, "JUMP %d\n", p->codelen); 
     codegen(p->suivant[1]); // Corps de la boucle
-    fprintf(out, "JUMP LABEL%d\n", 2);
-    fprintf(out, "LABEL%d:\n", 2);
+    fprintf(out, "JUMP %d\n", 1);
     //
 }
 
 static void codegenFonction(ast * p) {
+    // a reprendre 
     fprintf(out, "FUNC %s:\n", p->id);
     codegen(p->suivant[0]); // Paramètres ou déclarations locales
     codegen(p->suivant[1]); // Corps de la fonction
     fprintf(out, "END_FUNC\n");
+}
+
+static void codegenCondition(ast * p){
+    codegen(p->suivant[0]);
+    codegen(p->suivant[1]);
+    DEPILER();
+    switch (p->op) {
+        case '<':
+            fprintf(out, "ADD ");
+            break;
+        case '>':
+            fprintf(out, "SUB ");
+            break;
+        case '=':
+            fprintf(out, "MUL ");
+            break;
+        case '!=':
+            fprintf(out, "DIV ");
+            break;
+        default:
+            fprintf(stderr, "Opérateur inconnu : %c\n", p->op);
+            break;
+    }
+    EMPILER();
 }

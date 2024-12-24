@@ -64,7 +64,8 @@ extern int yydebug;
     FAIRE = 265,                   /* FAIRE  */
     FINTQ = 266,                   /* FINTQ  */
     NB = 267,                      /* NB  */
-    ID = 268                       /* ID  */
+    ID = 268,                      /* ID  */
+    DIFFERENT = 269                /* DIFFERENT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -80,7 +81,7 @@ union YYSTYPE
   char id[32];
  
 
-#line 84 "src/parser.h"
+#line 85 "src/parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

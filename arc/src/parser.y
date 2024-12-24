@@ -39,6 +39,7 @@
 %type <arbre> FONCTION
 %type <arbre> L_FONCTION
 %type <arbre> STRUCT_TQ
+%type <arbre> CONDITION
 
 %token MAIN '(' ')' ';' ',' ALGO
 %token VAR
@@ -47,6 +48,7 @@
 %token TQ FAIRE FINTQ
 %token <nb> NB 
 %token <id> ID
+%token '>' '<' '=' DIFFERENT
 %left '+' '-' 
 %left '*' '/'
 %start PROGRAMME
@@ -66,13 +68,19 @@ DECLA_VAR: %empty
 
 L_EXP: EXP ';' L_EXP {$$ = CreerNoeudLEXP($1, $3);}
     | EXP ';'{$$ = CreerNoeudLEXP($1, NULL);}
-    | STRUCT_TQ L_EXP {$$ = CreerNoeudTQ($1, $2);}
-    | STRUCT_TQ {$$ = CreerNoeudTQ($1, NULL);}
+    | STRUCT_TQ L_EXP {$$ = CreerNoeudLEXP($1, $2);}
+    | STRUCT_TQ {$$ = CreerNoeudLEXP($1, NULL);}
     ;
 
-STRUCT_TQ: TQ ID FAIRE
+STRUCT_TQ: TQ CONDITION FAIRE
               L_EXP
-          FINTQ {$$ = CreerNoeudLEXP($4, NULL);}
+          FINTQ {$$ = CreerNoeudTQ($2, $4);}
+
+CONDITION: EXP '>' EXP {$$ = CreerNoeudCondition('>', $1, $3);}
+         | EXP '<' EXP {$$ = CreerNoeudCondition('<', $1, $3);}
+         | EXP '=' EXP {$$ = CreerNoeudCondition('=', $1, $3);}
+         | EXP DIFFERENT EXP {$$ = CreerNoeudCondition('!', $1, $3);}
+         ;
 
 EXP : EXP '+' EXP {$$ = CreerNoeudOP('+', $1, $3);}
     | EXP '-' EXP {$$ = CreerNoeudOP('-', $1, $3);}
