@@ -11,6 +11,7 @@ static void codegenID(ast * p);
 static void codegenAFF(ast * p);
 static void codegenLEXP(ast * p);
 static void codegenTQ(ast * p);
+static void CodegenSI(ast *p);
 static void codegenFonction(ast * p);
 static void codegenCondition(ast * p);
 
@@ -33,6 +34,9 @@ void codegen(ast * p) {
             break;
         case AST_TQ:
             codegenTQ(p);
+            break;
+        case AST_SI:
+            CodegenSI(p);
             break;
         case AST_FONCTION:
             codegenFonction(p);
@@ -117,6 +121,27 @@ static void codegenTQ(ast * p) {
     fprintf(out, "JUMP %d\n", debut_tq); 
     ligne_act = ligne_act + 1;
 }
+
+static void CodegenSI(ast *p) {
+    int adresseSinon = ligne_act + 1;
+    int adresseFin = ligne_act + 1;
+
+    codegen(p->suivant[0]);
+    DEPILER();
+    fprintf(out, "JUMZ %d\n", adresseSinon);
+    ligne_act++;
+
+    codegen(p->suivant[1]);
+    fprintf(out, "JUMP %d\n", adresseFin);
+    ligne_act++;
+
+    adresseSinon = ligne_act;
+    if (p->suivant[2]) {
+        codegen(p->suivant[2]);
+    }
+    adresseFin = ligne_act;
+}
+
 
 static void codegenFonction(ast * p) {
     // a reprendre 

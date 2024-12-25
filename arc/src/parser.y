@@ -39,6 +39,7 @@
 %type <arbre> FONCTION
 %type <arbre> L_FONCTION
 %type <arbre> STRUCT_TQ
+%type <arbre> STRUCT_SI
 %type <arbre> CONDITION
 
 %token MAIN '(' ')' ';' ',' ALGO
@@ -46,6 +47,7 @@
 %token AFFECT
 %token DEBUT FIN 
 %token TQ FAIRE FINTQ
+%token SI ALORS SINON FINSI
 %token <nb> NB 
 %token <id> ID
 %token '>' '<' '=' '!'
@@ -70,11 +72,23 @@ L_EXP: EXP ';' L_EXP {$$ = CreerNoeudLEXP($1, $3);}
     | EXP ';'{$$ = CreerNoeudLEXP($1, NULL);}
     | STRUCT_TQ L_EXP {$$ = CreerNoeudLEXP($1, $2);}
     | STRUCT_TQ {$$ = CreerNoeudLEXP($1, NULL);}
+    | STRUCT_SI L_EXP {$$ = CreerNoeudLEXP($1, $2);}
+    | STRUCT_SI {$$ = CreerNoeudLEXP($1, NULL);}
     ;
 
 STRUCT_TQ: TQ CONDITION FAIRE
               L_EXP
           FINTQ {$$ = CreerNoeudTQ($2, $4);}
+
+STRUCT_SI: SI CONDITION ALORS
+             L_EXP
+           SINON
+             L_EXP
+           FINSI {$$ = CreerNoeudSI($2, $4, $6);}
+         | SI CONDITION ALORS
+             L_EXP
+           FINSI {$$ = CreerNoeudSI($2, $4, NULL);}
+         ;
 
 CONDITION: EXP '>' EXP {$$ = CreerNoeudCondition('>', $1, $3);}
          | EXP '<' EXP {$$ = CreerNoeudCondition('<', $1, $3);}

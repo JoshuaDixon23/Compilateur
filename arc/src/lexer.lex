@@ -41,6 +41,10 @@ CONDITION       ()
 "TQ"  {return TQ;}
 "FAIRE" {return FAIRE;}
 "FINTQ" {return FINTQ;}
+"SI"  {return SI;}
+"ALORS" {return ALORS;}
+"SINON" {return SINON;}
+"FINSI"   {return FINSI;}
 "ALGO" {return ALGO;}
 "<-" {return AFFECT;}
 [-+%*(/);=<>!] {return yytext[0];}

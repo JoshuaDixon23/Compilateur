@@ -6,6 +6,7 @@ static void PrintID(ast *p, char *indent);
 static void PrintLEXP(ast *p, char *indent);
 static void PrintAFF(ast *p, char *indent);
 static void PrintTQ(ast *p, char *indent);
+static void PrintSI(ast *p, char *indent);
 static void PrintFONCTION(ast *p, char *indent);
 static void PrintCONDITION(ast *p, char *indent);
 int profondeur = 0;
@@ -70,6 +71,17 @@ ast * CreerNoeudTQ(ast * p1, ast * p2){
   return p;
 }
 
+ast * CreerNoeudSI(ast *condition, ast *alors, ast *sinon) {
+    ast *p;
+    INIT_NOEUD(p);
+    p->type = AST_SI;
+    strcpy(p->type_str, "SI");
+    p->suivant[0] = condition;
+    p->suivant[1] = alors;
+    p->suivant[2] = sinon;
+    return p;
+}
+
 ast * CreerNoeudAFF(char * id, ast * p1){
   ast * p;
   INIT_NOEUD(p);
@@ -124,6 +136,9 @@ void PrintAst(ast * p){
     break;
   case AST_TQ:
     PrintTQ(p, indent);
+    break;
+  case AST_SI:
+    PrintSI(p, indent);
     break;
   case AST_CONDITION:
     PrintCONDITION(p, indent);
@@ -187,6 +202,21 @@ static void PrintTQ(ast *p, char *indent){
   PrintAst(p->suivant[0]);
   PrintAst(p->suivant[1]);
   profondeur--;
+}
+static void PrintSI(ast *p, char *indent) {
+    printf("%s" TXT_BOLD TXT_BLUE "SI:  " TXT_NULL "%p\n", indent, p);
+    printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n", indent, p->type_str);
+    printf("%s" TXT_BOLD "Codelen: " TXT_NULL "%d\n", indent, p->codelen);
+    profondeur++;
+    printf("%sCONDITION:\n", indent);
+    PrintAst(p->suivant[0]);
+    printf("%sALORS:\n", indent);
+    PrintAst(p->suivant[1]);
+    if (p->suivant[2]) {
+        printf("%sSINON:\n", indent);
+        PrintAst(p->suivant[2]);
+    }
+    profondeur--;
 }
 static void PrintCONDITION(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_BLUE "CONDITION:  " TXT_NULL "%p\n",indent, p);

@@ -33,6 +33,16 @@ void semantic(ast * p){
             semantic(p->suivant[1]);
             p->codelen = p->suivant[0]->codelen + p->suivant[1]->codelen + 1; 
             break;
+        case AST_SI:
+            semantic(p->suivant[0]);
+            semantic(p->suivant[1]);
+            if (p->suivant[2]) {
+                semantic(p->suivant[2]);
+                p->codelen = p->suivant[0]->codelen + p->suivant[1]->codelen + p->suivant[2]->codelen + 3; 
+            } else {
+                p->codelen = p->suivant[0]->codelen + p->suivant[1]->codelen + 2; 
+            }
+            break;
         case AST_CONDITION:
             semantic(p->suivant[0]);
             semantic(p->suivant[1]);

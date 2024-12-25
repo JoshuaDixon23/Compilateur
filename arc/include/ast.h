@@ -24,7 +24,7 @@
     p->codelen = 0 ;               \
   }								                  \
 
-enum {AST_NB = 256, AST_OP, AST_LEXP, AST_ID, AST_AFF, AST_TQ, AST_FONCTION, AST_CONDITION} ;
+enum {AST_NB = 256, AST_OP, AST_LEXP, AST_ID, AST_AFF, AST_TQ, AST_FONCTION, AST_CONDITION, AST_SI} ;
 
 typedef struct ast{
   int  type;
@@ -38,6 +38,7 @@ typedef struct ast{
 
 ast * CreerNoeudOP(int operateur, ast * p1, ast * p2);
 ast * CreerNoeudTQ(ast * p1, ast * p2);
+ast * CreerNoeudSI(ast * p1, ast * p2, ast * sinon);
 ast * CreerNoeudAFF(char * id, ast * p2);
 ast * CreerFeuilleNB(int nb);
 ast * CreerNoeudLEXP(ast * p1, ast * p2);

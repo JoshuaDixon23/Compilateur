@@ -1,0 +1,10 @@
+MAIN()
+VAR x;
+VAR y;
+DEBUT
+SI x > 0 ALORS
+    y <- x + 1;
+SINON
+    y <- 0;
+FINSI
+FIN
