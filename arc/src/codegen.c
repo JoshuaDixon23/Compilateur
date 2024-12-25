@@ -50,6 +50,20 @@ void codegen(ast * p) {
     }
 }
 
+void codegenINIT() {
+    int nbVars = 0;
+    for (int i = 0; i < 128; i++) {
+        if (TABSYMB[i].id[0] != '\0') {
+            nbVars++;
+        }
+    }
+
+    fprintf(out, "Initialisation de la pile\n\n");
+    fprintf(out, "LOAD #%d\n", nbVars + NB_REGISTRE);
+    fprintf(out, "STORE 3\n");    
+}
+
+
 static void codegenNB(ast * p) {
     fprintf(out, "LOAD #%d\n", p->valeur);
     EMPILER();
@@ -116,7 +130,9 @@ static void codegenLEXP(ast * p) {
 
 static void codegenTQ(ast * p) {
     int debut_tq = ligne_act;
+    fprintf(out,"Debut TQ :\n\n");
     codegen(p->suivant[0]); // Condition
+    fprintf(out,"corps TQ :\n\n");
     codegen(p->suivant[1]); // Corps de la boucle
     fprintf(out, "JUMP %d\n", debut_tq); 
     ligne_act = ligne_act + 1;
@@ -153,7 +169,9 @@ static void codegenFonction(ast * p) {
 }
 
 static void codegenCondition(ast * p){
+    fprintf(out,"Condition gauche :\n\n");
     codegen(p->suivant[0]);
+    fprintf(out,"Condition droite :\n\n");
     codegen(p->suivant[1]);
     // ex : 1 = 2
     DEPILER();                 // 2
@@ -161,19 +179,19 @@ static void codegenCondition(ast * p){
     fprintf(out, "SUB @3\n");  // 2 - 1 = 1
     switch (p->op) {
             case '<': 
-                fprintf(out, "JUMG %d\n", p->codelen);  // Saut si ACC > 0
+                fprintf(out, "JUMG %d\n", p->codelen+ligne_act+6);  // Saut si ACC > 0
                 fprintf(out, "NOP\n"); // Pour compenser le = 
                 break;
             case '>': 
-                fprintf(out, "JUML %d\n", p->codelen);  // Saut si ACC < 0
+                fprintf(out, "JUML %d\n", p->codelen+ligne_act+6);  // Saut si ACC < 0
                 fprintf(out, "NOP\n"); // Pour compenser le = 
                 break;
             case '=': 
-                fprintf(out, "JUMG %d\n", p->codelen);  // Saut si ACC > 0
-                fprintf(out, "JUML %d\n", p->codelen);  // Saut si ACC < 0
+                fprintf(out, "JUMG %d\n", p->codelen+ligne_act+6);  // Saut si ACC > 0
+                fprintf(out, "JUML %d\n", p->codelen+ligne_act+6);  // Saut si ACC < 0
                 break;
             case '!': 
-                fprintf(out, "JUMZ %d\n", p->codelen);  // Saut si ACC == 0
+                fprintf(out, "JUMZ %d\n", p->codelen+ligne_act+6);  // Saut si ACC == 0
                 fprintf(out, "NOP\n"); // Pour compenser le = 
                 break;
             default:

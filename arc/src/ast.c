@@ -210,10 +210,10 @@ static void PrintSI(ast *p, char *indent) {
     profondeur++;
     printf("%sCONDITION:\n", indent);
     PrintAst(p->suivant[0]);
-    printf("%sALORS:\n", indent);
+    printf(TXT_BOLD TXT_BLUE "%sALORS:\n", indent);
     PrintAst(p->suivant[1]);
     if (p->suivant[2]) {
-        printf("%sSINON:\n", indent);
+        printf(TXT_BOLD TXT_BLUE "%sSINON:\n", indent);
         PrintAst(p->suivant[2]);
     }
     profondeur--;
@@ -221,7 +221,7 @@ static void PrintSI(ast *p, char *indent) {
 static void PrintCONDITION(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_BLUE "CONDITION:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
-  printf("%s" TXT_BOLD "OP:   " TXT_NULL "%d\n",indent, p->op);
+  printf("%s" TXT_BOLD "OP:   " TXT_NULL "%c\n",indent, p->op);
   printf("%s" TXT_BOLD "Codelen: " TXT_NULL "%d\n",indent, p->codelen);
   profondeur++;
   PrintAst(p->suivant[0]);

@@ -62,10 +62,10 @@ PROGRAMME:L_FONCTION
           DECLA_VAR
           DEBUT 
             L_EXP
-          FIN {semantic($7); PrintAst($7);  codegen($7);}
+          FIN {semantic($7); PrintAst($7);  {codegenINIT();}; codegen($7);}
           ;
 
-DECLA_VAR: %empty
+DECLA_VAR: %empty   
         | VAR ID';' DECLA_VAR {ts_ajouter_id(TABSYMB, CTXT, $2);}
 
 L_EXP: EXP ';' L_EXP {$$ = CreerNoeudLEXP($1, $3);}

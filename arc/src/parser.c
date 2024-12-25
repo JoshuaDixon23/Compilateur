@@ -1492,7 +1492,7 @@ yyreduce:
     {
   case 2: /* PROGRAMME: L_FONCTION MAIN '(' ')' DECLA_VAR DEBUT L_EXP FIN  */
 #line 65 "src/parser.y"
-              {semantic((yyvsp[-1].arbre)); PrintAst((yyvsp[-1].arbre));  codegen((yyvsp[-1].arbre));}
+              {semantic((yyvsp[-1].arbre)); PrintAst((yyvsp[-1].arbre));  {codegenINIT();}; codegen((yyvsp[-1].arbre));}
 #line 1497 "src/parser.c"
     break;
 

@@ -2,7 +2,8 @@ MAIN()
 VAR a;
 VAR x;
 DEBUT
-TQ 1 = 2 FAIRE
+x<-2;
+TQ x = 2 FAIRE
     x <- x + 1;
 FINTQ
 FIN
