@@ -2,9 +2,10 @@ MAIN()
 VAR x;
 VAR y;
 DEBUT
-SI x > 0 ALORS
+x<-0;
+SI x > 1 ALORS
     y <- x + 1;
 SINON
-    y <- 0;
+    y <- 1;
 FINSI
 FIN

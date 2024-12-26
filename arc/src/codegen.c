@@ -60,9 +60,9 @@ void codegenINIT() {
     }
 
     fprintf(out, "Initialisation de la pile\n\n");
-    fprintf(out, "LOAD #%d\n", nbVars + NB_REGISTRE);
+    fprintf(out, "LOAD #%d\n", nbVars + NB_REGISTRE - 1);
     fprintf(out, "STORE 3\n");
-    ligne_act = 3;
+    ligne_act = 2;
 }
 
 
@@ -185,19 +185,19 @@ static void codegenCondition(ast * p){
     fprintf(out, "SUB @3\n");  // 2 - 1 = 1
     switch (p->op) {
             case '<': 
-                fprintf(out, "JUMG %d\n", 7+ligne_act+temp);  // Saut si ACC > 0
+                fprintf(out, "JUMG %d\n", 6+ligne_act+temp);  // Saut si ACC > 0
                 fprintf(out, "NOP\n"); // Pour compenser le = 
                 break;
             case '>': 
-                fprintf(out, "JUML %d\n", 7+ligne_act+temp);  // Saut si ACC < 0
+                fprintf(out, "JUML %d\n", 6+ligne_act+temp);  // Saut si ACC < 0
                 fprintf(out, "NOP\n"); // Pour compenser le = 
                 break;
             case '=': 
-                fprintf(out, "JUMG %d\n", 7+ligne_act+temp);  // Saut si ACC > 0
-                fprintf(out, "JUML %d\n", 7+ligne_act+temp);  // Saut si ACC < 0
+                fprintf(out, "JUMG %d\n", 6+ligne_act+temp);  // Saut si ACC > 0
+                fprintf(out, "JUML %d\n", 6+ligne_act+temp);  // Saut si ACC < 0
                 break;
             case '!': 
-                fprintf(out, "JUMZ %d\n", 7+ligne_act+temp);  // Saut si ACC == 0
+                fprintf(out, "JUMZ %d\n", 6+ligne_act+temp);  // Saut si ACC == 0
                 fprintf(out, "NOP\n"); // Pour compenser le = 
                 break;
             default:
