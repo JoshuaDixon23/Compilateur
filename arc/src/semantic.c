@@ -3,21 +3,25 @@
 void semantic(ast * p){
     switch(p->type){
         case AST_NB:
-            p-> codelen = 2;
+            p-> codelen = 3;
             break;
         case AST_ID:
-            p-> codelen = 2;
+            p-> codelen = 3;
             break;
         case AST_OP:
             semantic(p->suivant[0]);
             semantic(p->suivant[1]);
-            p->codelen = p->suivant[0]->codelen + p->suivant[1]->codelen + 6;
+            p->codelen = p->suivant[0]->codelen + p->suivant[1]->codelen + 7;
             break;
         case AST_LEXP:
             semantic(p->suivant[0]);
             if(p->suivant[1]){
                 semantic(p->suivant[1]);
-            }   
+                p->codelen = p->suivant[0]->codelen + p->suivant[1]->codelen;
+            }
+            else{
+                p->codelen = p->suivant[0]->codelen;
+            }
             break;
         case AST_AFF:
             semantic(p->suivant[0]);
