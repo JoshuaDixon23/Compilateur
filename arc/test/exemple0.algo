@@ -1,3 +1,15 @@
+ALGO test_1 (a)
+VAR f;
+DEBUT
+    b <- 1;
+    a <- a + b;
+FIN
+ALGO test_2 (a)
+VAR b;
+DEBUT
+    b <- 1;
+    a <- a + b;
+FIN
 MAIN()
 VAR a;
 VAR x;

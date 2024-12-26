@@ -41,6 +41,7 @@
 %type <arbre> STRUCT_TQ
 %type <arbre> STRUCT_SI
 %type <arbre> CONDITION
+%type <id> FUCNID
 
 %token MAIN '(' ')' ';' ',' ALGO
 %token VAR
@@ -49,7 +50,7 @@
 %token TQ FAIRE FINTQ
 %token SI ALORS SINON FINSI
 %token <nb> NB 
-%token <id> ID
+%token <id> ID 
 %token '>' '<' '=' '!'
 %left '+' '-' 
 %left '*' '/'
@@ -62,7 +63,7 @@ PROGRAMME:L_FONCTION
           DECLA_VAR
           DEBUT 
             L_EXP
-          FIN {semantic($7); PrintAst($7);  {codegenINIT();}; codegen($7);}
+          FIN {semantic($7);  PrintAst($1); PrintAst($7);  {codegenINIT();}; codegen($7);}
           ;
 
 DECLA_VAR: %empty   
@@ -114,15 +115,17 @@ L_ID : ID {$$ = CreerNoeudLEXP(CreerFeuilleID($1), NULL);}
     | ID ',' L_ID {$$ = CreerNoeudLEXP(CreerFeuilleID($1), $3);}
     ;
 
-FONCTION: ALGO ID '(' L_PARAM ')'
+FUCNID : ID {strcpy(CTXT, $1);}
+
+FONCTION: ALGO FUCNID '(' L_PARAM ')'
           DECLA_VAR
           DEBUT
             L_EXP
-          FIN {$$ = CreerNoeudFonction($2, $4, $8);}
+          FIN { $$ = CreerNoeudFonction($2, $4, $8);}
           ;
 
 L_FONCTION: %empty {$$ = NULL;}
-          | FONCTION L_FONCTION {$$ = $1;}
+          | FONCTION L_FONCTION {strcpy(CTXT, "GLOBAL");$$ = CreerNoeudLFonction($1,$2);semantic($1);}
           ;
 %%
 

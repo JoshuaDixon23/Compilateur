@@ -31,7 +31,7 @@
 %option yylineno
 
 NOMBRE          ([1-9][0-9]*|0)
-ID              ([a-zA-Z][a-zA-Z]*)
+ID              ([a-zA-Z][a-zA-Z_1-9]*)
 CONDITION       ()
 %%
 "MAIN" {return MAIN;}
