@@ -24,9 +24,8 @@ struct ts_cellule{
     int valeur;
 };
 typedef struct ts_cellule ts[128];
-
-int ts_recherche_id(ts tabsymb, char * context, char * id);
-int ts_ajouter_id(ts tabsymb, char * context, char * id);
+int ts_ajouter_id(ts tabsymb, char * context, char * id, char * type);
+int ts_ajouter_id(ts tabsymb, char * context, char * id, char * type);
 void PrintTS(ts tabsymb);
 
 #endif

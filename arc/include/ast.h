@@ -24,7 +24,8 @@
     p->codelen = 0 ;               \
   }								                  \
 
-enum {AST_NB = 256, AST_OP, AST_LEXP, AST_ID, AST_AFF, AST_TQ, AST_FONCTION, AST_CONDITION, AST_SI, AST_LFONCTION} ;
+enum {AST_NB = 256, AST_OP, AST_LEXP, AST_ID, AST_AFF, AST_TQ, AST_FONCTION, 
+AST_CONDITION, AST_SI, AST_LFONCTION, AST_APPEL} ;
 
 typedef struct ast{
   int  type;
@@ -47,6 +48,8 @@ ast * CreerNoeudFonction(char * id, ast * p1, ast * p2);
 ast * CreerNoeudAFF(char * id, ast * p1);
 ast * CreerNoeudCondition(int operateur, ast * p1, ast * p2);
 ast * CreerNoeudLFonction(ast * p1, ast * p2);
+ast * CreerNoeudAppel(char* id, ast * p1);
+
 
 
 void FreeAst(ast * p);

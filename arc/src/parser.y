@@ -40,7 +40,8 @@
 %type <arbre> L_FONCTION
 %type <arbre> STRUCT_TQ
 %type <arbre> STRUCT_SI
-%type <arbre> CONDITION
+%type <arbre> CONDITION 
+%type <arbre> APPEL_FONCTION
 %type <id> FUCNID
 
 %token MAIN '(' ')' ';' ',' ALGO
@@ -67,7 +68,7 @@ PROGRAMME:L_FONCTION
           ;
 
 DECLA_VAR: %empty   
-        | VAR ID';' DECLA_VAR {ts_ajouter_id(TABSYMB, CTXT, $2);}
+        | VAR ID';' DECLA_VAR {ts_ajouter_id(TABSYMB, CTXT, $2, "integer");}
 
 L_EXP: EXP ';' L_EXP {$$ = CreerNoeudLEXP($1, $3);}
     | EXP ';'{$$ = CreerNoeudLEXP($1, NULL);}
@@ -105,7 +106,10 @@ EXP : EXP '+' EXP {$$ = CreerNoeudOP('+', $1, $3);}
     | '('EXP')' {$$ = $2;}
     | NB {$$ = CreerFeuilleNB($1);}
     | ID {$$ = CreerFeuilleID($1);}
-;
+    | APPEL_FONCTION {$$ = $1;} 
+    ;
+
+APPEL_FONCTION : ID '(' L_PARAM ')' { $$ = CreerNoeudAppel($1, $3); };
 
 L_PARAM : %empty {$$ = NULL;}
       | L_ID {$$ = $1;}
@@ -115,7 +119,7 @@ L_ID : ID {$$ = CreerNoeudLEXP(CreerFeuilleID($1), NULL);}
     | ID ',' L_ID {$$ = CreerNoeudLEXP(CreerFeuilleID($1), $3);}
     ;
 
-FUCNID : ID {strcpy(CTXT, $1);}
+FUCNID : ID {strcpy(CTXT, $1); ts_ajouter_id(TABSYMB, CTXT, $1, "Fonction");}
 
 FONCTION: ALGO FUCNID '(' L_PARAM ')'
           DECLA_VAR
