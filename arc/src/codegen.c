@@ -63,7 +63,8 @@ void codegenINIT() {
     }
 
     fprintf(out, "Initialisation de la pile\n\n");
-    fprintf(out, "LOAD #%d\n", nbVars + NB_REGISTRE - 1);
+    //fprintf(out, "%d %d\n", nbVars, NB_REGISTRE);
+    fprintf(out, "LOAD #%d\n", nbVars + NB_REGISTRE);
     fprintf(out, "STORE 3\n");
     ligne_act = 2;
 }
@@ -99,7 +100,7 @@ static void codegenOP(ast * p) {
     }
     fprintf(out, "@3 \n");
     EMPILER();
-    ligne_act = ligne_act + 7;
+    ligne_act = ligne_act + 6;
 }
 
 static void codegenID(ast * p) {
@@ -136,13 +137,12 @@ static void codegenLEXP(ast * p) {
 static void codegenTQ(ast * p) {
     int debut_tq = ligne_act;
     temp = p->suivant[1]->codelen;
-    fprintf(out,"Debut TQ :\n\n");
+    //fprintf(out,"Debut TQ :\n\n");
     codegen(p->suivant[0]); // Condition
-    fprintf(out,"corps TQ :\n\n");
+    //fprintf(out,"corps TQ :\n\n");
     codegen(p->suivant[1]); // Corps de la boucle
     fprintf(out, "JUMP %d\n", debut_tq); 
     ligne_act = ligne_act + 1;
-    fprintf(out, "%d\n", ligne_act);
 }
 
 static void CodegenSI(ast *p) {
@@ -151,7 +151,7 @@ static void CodegenSI(ast *p) {
 
     codegen(p->suivant[1]);
     fprintf(out, "JUMP %d\n", ligne_act + p->suivant[2]->codelen);
-    ligne_act++;
+    ligne_act = ligne_act + 1;
     if (p->suivant[2]) {
         codegen(p->suivant[2]);
     }
@@ -169,10 +169,10 @@ static void codegenFonction(ast * p) {
 }
 
 static void codegenCondition(ast * p){
-    fprintf(out,"Condition gauche :\n\n");
-    codegen(p->suivant[0]);
-    fprintf(out,"Condition droite :\n\n");
+    //fprintf(out,"Condition gauche :\n\n");
     codegen(p->suivant[1]);
+    //fprintf(out,"Condition droite :\n\n");
+    codegen(p->suivant[0]);
     // ex : 1 = 2
     //fprintf(out, "%d\n", ligne_act);
     //fprintf(out, "%d\n", p->codelen);
@@ -181,19 +181,20 @@ static void codegenCondition(ast * p){
     fprintf(out, "SUB @3\n");  // 2 - 1 = 1
     switch (p->op) {
             case '<': 
-                fprintf(out, "JUMG %d\n", 6+ligne_act+temp);  // Saut si ACC > 0
+                //fprintf(out,"%d %d\n", ligne_act+4, temp);
+                fprintf(out, "JUMG %d\n", 7+ligne_act+temp);  // Saut si ACC > 0
                 fprintf(out, "NOP\n"); // Pour compenser le = 
                 break;
             case '>': 
-                fprintf(out, "JUML %d\n", 6+ligne_act+temp);  // Saut si ACC < 0
+                fprintf(out, "JUML %d\n", 7+ligne_act+temp);  // Saut si ACC < 0
                 fprintf(out, "NOP\n"); // Pour compenser le = 
                 break;
             case '=': 
-                fprintf(out, "JUMG %d\n", 6+ligne_act+temp);  // Saut si ACC > 0
-                fprintf(out, "JUML %d\n", 6+ligne_act+temp);  // Saut si ACC < 0
+                fprintf(out, "JUMG %d\n", 7+ligne_act+temp);  // Saut si ACC > 0
+                fprintf(out, "JUML %d\n", 7+ligne_act+temp);  // Saut si ACC < 0
                 break;
             case '!': 
-                fprintf(out, "JUMZ %d\n", 6+ligne_act+temp);  // Saut si ACC == 0
+                fprintf(out, "JUMZ %d\n", 7+ligne_act+temp);  // Saut si ACC == 0
                 fprintf(out, "NOP\n"); // Pour compenser le = 
                 break;
             default:

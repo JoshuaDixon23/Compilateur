@@ -3,9 +3,13 @@ VAR x;
 VAR y;
 DEBUT
 x<-0;
-SI x > 1 ALORS
-    y <- x + 1;
-SINON
-    y <- 1;
-FINSI
+y<-0;
+TQ y > 10 FAIRE
+    SI x<5 ALORS
+        x <- x + 1;
+    SINON
+        x <- x + 2;
+    FINSI
+    y<-y+1;
+FINTQ
 FIN

@@ -12,7 +12,7 @@ void semantic(ast * p){
         case AST_OP:
             semantic(p->suivant[0]);
             semantic(p->suivant[1]);
-            p->codelen = p->suivant[0]->codelen + p->suivant[1]->codelen + 7;
+            p->codelen = p->suivant[0]->codelen + p->suivant[1]->codelen + 6;
             break;
         case AST_LEXP:
             semantic(p->suivant[0]);
@@ -54,9 +54,9 @@ void semantic(ast * p){
             semantic(p->suivant[1]);
             if (p->suivant[2]) {
                 semantic(p->suivant[2]);
-                p->codelen = p->suivant[0]->codelen + p->suivant[1]->codelen + p->suivant[2]->codelen + 3; 
+                p->codelen = p->suivant[0]->codelen + p->suivant[1]->codelen + p->suivant[2]->codelen + 1; 
             } else {
-                p->codelen = p->suivant[0]->codelen + p->suivant[1]->codelen + 2; 
+                p->codelen = p->suivant[0]->codelen + p->suivant[1]->codelen + 1; 
             }
             break;
         case AST_CONDITION:

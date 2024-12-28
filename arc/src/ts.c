@@ -39,13 +39,13 @@ int ts_recherche_param(ts tabsymb, char *context, int n) {
 }
 
 
-int ts_recherche_param(ts tabsymb, char * context, char * id) {
+int ts_recherche_id(ts tabsymb, char * context, char * id) {
     int i = 0;
 
     while (tabsymb[i].adresse != -1) {
         // Vérification du contexte et de l'identifiant
         if (strcmp(tabsymb[i].context, context) == 0 && 
-            strcmp(tabsymb[i].id, id) == 0 && tabsymb[i].param == 1){
+            strcmp(tabsymb[i].id, id) == 0 && tabsymb[i].param == 0){
             return i;
         }
         i++;
