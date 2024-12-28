@@ -68,7 +68,7 @@ PROGRAMME:L_FONCTION
           ;
 
 DECLA_VAR: %empty   
-        | VAR ID';' DECLA_VAR {ts_ajouter_id(TABSYMB, CTXT, $2, "integer");}
+        | VAR ID';' DECLA_VAR {ts_ajouter_id(TABSYMB, CTXT, $2, 0);}
 
 L_EXP: EXP ';' L_EXP {$$ = CreerNoeudLEXP($1, $3);}
     | EXP ';'{$$ = CreerNoeudLEXP($1, NULL);}
@@ -119,7 +119,7 @@ L_ID : ID {$$ = CreerNoeudLEXP(CreerFeuilleID($1), NULL);}
     | ID ',' L_ID {$$ = CreerNoeudLEXP(CreerFeuilleID($1), $3);}
     ;
 
-FUCNID : ID {strcpy(CTXT, $1); ts_ajouter_id(TABSYMB, CTXT, $1, "Fonction");}
+FUCNID : ID {strcpy(CTXT, $1); ts_ajouter_id(TABSYMB, CTXT, $1, 2);}
 
 FONCTION: ALGO FUCNID '(' L_PARAM ')'
           DECLA_VAR

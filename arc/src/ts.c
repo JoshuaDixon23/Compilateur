@@ -1,6 +1,6 @@
 #include "ts.h"
 
-int ts_ajouter_id(ts tabsymb, char * context, char * id, char * type) {
+int ts_ajouter_id(ts tabsymb, char * context, char * id, int type) {
     int i = 0;
 
     // Trouver la première position libre
@@ -15,19 +15,19 @@ int ts_ajouter_id(ts tabsymb, char * context, char * id, char * type) {
 
     strcpy(tabsymb[i].context, context);
     strcpy(tabsymb[i].id, id);
-    strcpy(tabsymb[i].type, type);
+    tabsymb[i].type = type;
     tabsymb[i].adresse = i;
 
     return i;
 }
-int ts_recherche_id(ts tabsymb, char * context, char * id, char * type) {
+int ts_recherche_id(ts tabsymb, char * context, char * id, int type) {
     int i = 0;
 
     while (tabsymb[i].adresse != -1) {
         // Vérification du contexte, de l'identifiant, et éventuellement du type
         if (strcmp(tabsymb[i].context, context) == 0 && 
             strcmp(tabsymb[i].id, id) == 0 &&
-            strcmp(tabsymb[i].type, type) == 0) {
+            tabsymb[i].type == type) {
             return i;
         }
         i++;

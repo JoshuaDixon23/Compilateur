@@ -1502,7 +1502,7 @@ yyreduce:
 
   case 4: /* DECLA_VAR: VAR ID ';' DECLA_VAR  */
 #line 71 "src/parser.y"
-                              {ts_ajouter_id(TABSYMB, CTXT, (yyvsp[-2].id), "integer");}
+                              {ts_ajouter_id(TABSYMB, CTXT, (yyvsp[-2].id), 0);}
 #line 1507 "src/parser.c"
     break;
 
@@ -1670,7 +1670,7 @@ yyreduce:
 
   case 32: /* FUCNID: ID  */
 #line 122 "src/parser.y"
-            {strcpy(CTXT, (yyvsp[0].id)); ts_ajouter_id(TABSYMB, CTXT, (yyvsp[0].id), "Fonction");}
+            {strcpy(CTXT, (yyvsp[0].id)); ts_ajouter_id(TABSYMB, CTXT, (yyvsp[0].id), 2);}
 #line 1675 "src/parser.c"
     break;
 

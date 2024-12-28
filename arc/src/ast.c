@@ -161,7 +161,7 @@ void PrintAst(ast * p){
     PrintTQ(p, indent);
     break;
   case AST_SI:
-    PrintSI(p, indent);
+    PrintSI(p, indent); 
     break;
   case AST_CONDITION:
     PrintCONDITION(p, indent);
