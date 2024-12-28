@@ -15,6 +15,7 @@ static void codegenTQ(ast * p);
 static void CodegenSI(ast *p);
 static void codegenFonction(ast * p);
 static void codegenCondition(ast * p);
+static void codegenAPPEL(ast * p);
 
 void codegen(ast * p) {
     switch (p->type) {
@@ -45,6 +46,8 @@ void codegen(ast * p) {
         case AST_CONDITION:
             codegenCondition(p);
             break;
+        case AST_APPEL:
+            codegenAPPEL(p);
         default:
             fprintf(stderr, "Type AST inconnu : %d\n", p->type);
             break;
@@ -143,23 +146,16 @@ static void codegenTQ(ast * p) {
 }
 
 static void CodegenSI(ast *p) {
-    int adresseSinon = ligne_act + 1;
-    int adresseFin = ligne_act + 1;
-
+    temp = p->suivant[1]->codelen;
     codegen(p->suivant[0]);
-    DEPILER();
-    fprintf(out, "JUMZ %d\n", adresseSinon);
-    ligne_act++;
 
     codegen(p->suivant[1]);
-    fprintf(out, "JUMP %d\n", adresseFin);
+    fprintf(out, "JUMP %d\n", ligne_act + p->suivant[2]->codelen);
     ligne_act++;
-
-    adresseSinon = ligne_act;
     if (p->suivant[2]) {
         codegen(p->suivant[2]);
     }
-    adresseFin = ligne_act;
+
 }
 
 
@@ -205,4 +201,42 @@ static void codegenCondition(ast * p){
                 break;
         }
     ligne_act = ligne_act + 6;
+}
+
+static void codegenAPPEL(ast * p){
+    //ts tab_temp;
+    //INIT_TS(tab_temp);
+    //tab_temp = TABSYMB;
+    fprintf(out, "LOAD 3\n");
+    fprintf(out, "STORE 4\n"); // store la valeur de la pile avant l'appel
+
+    int index_fonction = ts_recherche_id(TABSYMB,"GLOBAL",p->id);
+    int count = 0;
+    ast *param = p->suivant[0]; 
+    while (param != NULL) {
+        ast *param_id = param->suivant[0]; 
+        if (param_id->type == AST_ID) {
+            char *nom_id = param_id->id;
+            int index_global = ts_recherche_id(TABSYMB, CTXT, nom_id);
+            printf("Valeur de %s : %d\n", nom_id, index);
+            if(index == -1){
+                fprintf(stderr, "Erreur : Variable impossible : %s\n",nom_id);
+            }
+            // l'adresse de la variable de parametre de la fonction 
+            // soit a la meme adresse que la variable d appel
+            int index_local =ts_recherche_param(TABSYMB, TABSYMB[index_fonction].id,count);
+            fprintf(out, "LOAD %d\n", index_global + 9); // met la valeur de index_global dans index_local
+            fprintf(out, "STORE %d\n", index_local + 9);
+            
+        } else {
+            fprintf(stderr, "Erreur : type inattendu dans L_ID.type : %s\n", param_id->type_str);
+        }
+        param = param->suivant[1]; // Passe au prochain noeud de L_EXP
+        count++;
+    }
+    
+
+
+    codegen(TABSYMB[index_fonction].p);
+    // remettre tout a l'etat d'origine
 }

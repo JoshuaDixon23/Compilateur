@@ -13,6 +13,7 @@
 
   struct ast * ARBRE_ABSTRAIT = NULL;
 
+
   void yyerror(const char * s);
 
   char srcname[64];
@@ -34,8 +35,8 @@
 
 %type <arbre> EXP
 %type <arbre> L_EXP
-%type <arbre> L_ID
-%type <arbre> L_PARAM
+%type <arbre> L_ID L_ID_INIT
+%type <arbre> L_PARAM L_PARAM_INIT
 %type <arbre> FONCTION
 %type <arbre> L_FONCTION
 %type <arbre> STRUCT_TQ
@@ -68,7 +69,7 @@ PROGRAMME:L_FONCTION
           ;
 
 DECLA_VAR: %empty   
-        | VAR ID';' DECLA_VAR {ts_ajouter_id(TABSYMB, CTXT, $2, 0);}
+        | VAR ID';' DECLA_VAR {ts_ajouter_id(TABSYMB, CTXT, $2, 0, NULL,0);}
 
 L_EXP: EXP ';' L_EXP {$$ = CreerNoeudLEXP($1, $3);}
     | EXP ';'{$$ = CreerNoeudLEXP($1, NULL);}
@@ -109,7 +110,7 @@ EXP : EXP '+' EXP {$$ = CreerNoeudOP('+', $1, $3);}
     | APPEL_FONCTION {$$ = $1;} 
     ;
 
-APPEL_FONCTION : ID '(' L_PARAM ')' { $$ = CreerNoeudAppel($1, $3); };
+APPEL_FONCTION : ID '(' L_PARAM ')' {$$ = CreerNoeudAppel($1,$3);}
 
 L_PARAM : %empty {$$ = NULL;}
       | L_ID {$$ = $1;}
@@ -119,13 +120,22 @@ L_ID : ID {$$ = CreerNoeudLEXP(CreerFeuilleID($1), NULL);}
     | ID ',' L_ID {$$ = CreerNoeudLEXP(CreerFeuilleID($1), $3);}
     ;
 
-FUCNID : ID {strcpy(CTXT, $1); ts_ajouter_id(TABSYMB, CTXT, $1, 2);}
+L_PARAM_INIT : %empty {$$ = NULL;}
+      | L_ID_INIT {$$ = $1;}
+      ;
 
-FONCTION: ALGO FUCNID '(' L_PARAM ')'
+L_ID_INIT : ID {$$ = CreerNoeudLEXP(CreerFeuilleID($1), NULL);ts_ajouter_id(TABSYMB, CTXT, $1, 0, NULL,1);}
+    | ID ',' L_ID {$$ = CreerNoeudLEXP(CreerFeuilleID($1), $3);ts_ajouter_id(TABSYMB, CTXT, $1, 0, NULL,1);}
+    ;
+
+FUCNID : ID {strcpy(CTXT, $1);}
+
+FONCTION: ALGO FUCNID '(' L_PARAM_INIT ')'
           DECLA_VAR
           DEBUT
             L_EXP
-          FIN { $$ = CreerNoeudFonction($2, $4, $8);}
+          FIN { $$ = CreerNoeudFonction($2, $4, $8); 
+          ts_ajouter_id(TABSYMB, "GLOBAL", $2, 2, $8,0);}
           ;
 
 L_FONCTION: %empty {$$ = NULL;}

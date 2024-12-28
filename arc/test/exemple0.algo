@@ -16,6 +16,7 @@ VAR x;
 DEBUT
 x<-2;
 TQ x = 2 FAIRE
+    test_1(x);
     x <- x + 1;
 FINTQ
 FIN

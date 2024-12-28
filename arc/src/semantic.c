@@ -1,5 +1,6 @@
 #include "semantic.h"
 
+
 void semantic(ast * p){
     switch(p->type){
         case AST_NB:
@@ -62,6 +63,10 @@ void semantic(ast * p){
             semantic(p->suivant[0]);
             semantic(p->suivant[1]);
             p->codelen = p->suivant[0]->codelen+ p->suivant[1]->codelen + 6; 
+            break;
+        case AST_APPEL:
+            semantic(p->suivant[0]);
+            p->codelen = p->suivant[0]->codelen+ 1; // a revoir 
             break;
         default:
             p->codelen = 1;

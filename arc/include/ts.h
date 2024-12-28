@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "ast.h"
 
 
 #define INIT_TS(tab){		      \
@@ -13,7 +14,9 @@
         tab[i].adresse = -1;          \
         tab[i].type = -1;              \
         tab[i].valeur = 0;              \
-    }			                         \
+        tab[i].p = NULL;                 \
+        tab[i].param = 0;                 \
+    }			                           \
   };	
 // type 0 : integer
 // type 1 : char (pour plus tard...)
@@ -25,10 +28,13 @@ struct ts_cellule{
     int adresse;
     int type;
     int valeur;
+    ast * p;
+    int param; // si 0 not pararmetre else pararmetre
 };
 typedef struct ts_cellule ts[128];
-int ts_ajouter_id(ts tabsymb, char * context, char * id, int type);
-int ts_ajouter_id(ts tabsymb, char * context, char * id, int type);
+int ts_ajouter_id(ts tabsymb, char * context, char * id, int type, ast * p, int param);
+int ts_recherche_id(ts tabsymb, char * context, char * id);
+int ts_recherche_param(ts tabsymb, char *context, int n) ;
 void PrintTS(ts tabsymb);
 
 #endif
