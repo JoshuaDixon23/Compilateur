@@ -1,5 +1,7 @@
 #include "semantic.h"
 
+extern ts TABSYMB;
+extern char CTXT[32];
 
 void semantic(ast * p){
     switch(p->type){
@@ -65,8 +67,10 @@ void semantic(ast * p){
             p->codelen = p->suivant[0]->codelen+ p->suivant[1]->codelen + 6; 
             break;
         case AST_APPEL:
-            semantic(p->suivant[0]);
-            p->codelen = p->suivant[0]->codelen+ 1; // a revoir 
+            int index = ts_recherche_id(TABSYMB, CTXT, p->id);
+            semantic(TABSYMB[index].p);
+
+            p->codelen = TABSYMB[index].p->codelen + 4; // a revoir 
             break;
         default:
             p->codelen = 1;

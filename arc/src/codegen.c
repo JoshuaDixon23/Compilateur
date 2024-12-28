@@ -48,8 +48,11 @@ void codegen(ast * p) {
             break;
         case AST_APPEL:
             codegenAPPEL(p);
+            break;
         default:
             fprintf(stderr, "Type AST inconnu : %d\n", p->type);
+            fprintf(stderr, "Adresse AST : %p\n", (void *)p);
+            fprintf(stderr, "Codelen : %d\n", p->codelen);
             break;
     }
 }
@@ -204,40 +207,72 @@ static void codegenCondition(ast * p){
     ligne_act = ligne_act + 6;
 }
 
-static void codegenAPPEL(ast * p){
-    //ts tab_temp;
-    //INIT_TS(tab_temp);
-    //tab_temp = TABSYMB;
-    fprintf(out, "LOAD 3\n");
-    fprintf(out, "STORE 4\n"); // store la valeur de la pile avant l'appel
+static void codegenAPPEL(ast *p) {
+    // SAUVEGARDE //
+    // sauvegarde de la ts
+    ts tabsymb_backup;       
+    memcpy(tabsymb_backup, TABSYMB, sizeof(ts));
 
-    int index_fonction = ts_recherche_id(TABSYMB,"GLOBAL",p->id);
+    // Sauvegarde de la pile avant l'appel
+    fprintf(out, "LOAD 3\n");
+    fprintf(out, "STORE 4\n"); 
+
+    // Sauvegarde du contexte actuel
+    char context_debut[100];
+    strcpy(context_debut, CTXT);
+
+    // --------- //
+
+    // Recherche de la fonction dans la table des symboles
+    int index_fonction = ts_recherche_id(TABSYMB, CTXT, p->id);
+    if (index_fonction == -1) {
+        fprintf(stderr, "Erreur : Fonction %s introuvable dans le contexte %s\n", p->id, CTXT);
+        exit(EXIT_FAILURE);
+    }
+
+    // associe les adresses des parametres au variables d'appels
     int count = 0;
-    ast *param = p->suivant[0]; 
+    ast *param = p->suivant[0];
     while (param != NULL) {
-        ast *param_id = param->suivant[0]; 
+        ast *param_id = param->suivant[0];
         if (param_id->type == AST_ID) {
             char *nom_id = param_id->id;
             int index_global = ts_recherche_id(TABSYMB, CTXT, nom_id);
-            printf("Valeur de %s : %d\n", nom_id, index);
-            if(index == -1){
-                fprintf(stderr, "Erreur : Variable impossible : %s\n",nom_id);
+            if (index_global == -1) {
+                fprintf(stderr, "Erreur : Variable inconnue %s dans le contexte %s\n", nom_id, CTXT);
+                exit(EXIT_FAILURE);
             }
-            // l'adresse de la variable de parametre de la fonction 
-            // soit a la meme adresse que la variable d appel
-            int index_local =ts_recherche_param(TABSYMB, TABSYMB[index_fonction].id,count);
-            fprintf(out, "LOAD %d\n", index_global + 9); // met la valeur de index_global dans index_local
-            fprintf(out, "STORE %d\n", index_local + 9);
-            
+
+            int index_local = ts_recherche_param(TABSYMB, TABSYMB[index_fonction].id, count);
+            if (index_local == -1) {
+                fprintf(stderr, "Erreur : Paramètre %d introuvable dans la fonction %s\n", count, TABSYMB[index_fonction].id);
+                exit(EXIT_FAILURE);
+            }
+
+            int index_final = ts_ajouter_id(TABSYMB, TABSYMB[index_fonction].id, TABSYMB[index_local].id, 0 ,NULL, 0);
+            TABSYMB[index_final].adresse = TABSYMB[index_global].adresse;
         } else {
-            fprintf(stderr, "Erreur : type inattendu dans L_ID.type : %s\n", param_id->type_str);
+            fprintf(stderr, "Erreur : type inattendu\n");
+            exit(EXIT_FAILURE);
         }
-        param = param->suivant[1]; // Passe au prochain noeud de L_EXP
+        param = param->suivant[1]; // Passe au prochain paramètre
         count++;
     }
-    
 
+    // Mise à jour du contexte pour exécuter la fonction
+    strcpy(CTXT, TABSYMB[index_fonction].id);
 
+    // Génère le code pour le corps de la fonction
     codegen(TABSYMB[index_fonction].p);
-    // remettre tout a l'etat d'origine
+
+    // Restaure le contexte initial
+    strcpy(CTXT, context_debut); 
+
+    // Restauration de la table des symboles
+    memcpy(TABSYMB, tabsymb_backup, sizeof(ts)); 
+    strcpy(CTXT, context_debut); 
+
+    // Restauration de la pile
+    fprintf(out, "LOAD 4\n");
+    fprintf(out, "STORE 3\n"); 
 }

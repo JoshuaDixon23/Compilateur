@@ -1,15 +1,10 @@
 ALGO test_1 (a)
 VAR f;
 DEBUT
-    b <- 1;
-    a <- a + b;
+    f <- 1;
+    a <- a + f;
 FIN
-ALGO test_2 (a)
-VAR b;
-DEBUT
-    b <- 1;
-    a <- a + b;
-FIN
+
 MAIN()
 VAR a;
 VAR x;
@@ -17,6 +12,5 @@ DEBUT
 x<-2;
 TQ x = 2 FAIRE
     test_1(x);
-    x <- x + 1;
 FINTQ
 FIN
