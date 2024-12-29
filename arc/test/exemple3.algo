@@ -3,8 +3,8 @@ VAR x;
 VAR y;
 DEBUT
 x<-0;
-y<-0;
-TQ y > 10 FAIRE
+y<-10;
+TQ x < y FAIRE
     SI x<5 ALORS
         x <- x + 1;
     SINON

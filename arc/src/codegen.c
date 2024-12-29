@@ -165,7 +165,7 @@ static void CodegenSI(ast *p) {
     codegen(p->suivant[0]);
 
     codegen(p->suivant[1]);
-    fprintf(out, "JUMP %d\n", ligne_act + p->suivant[2]->codelen);
+    fprintf(out, "JUMP %d\n", ligne_act + p->suivant[2]->codelen + 1);
     ligne_act = ligne_act + 1;
     if (p->suivant[2]) {
         codegen(p->suivant[2]);
@@ -185,9 +185,18 @@ static void codegenFonction(ast * p) {
 
 static void codegenCondition(ast * p){
     //fprintf(out,"Condition gauche :\n\n");
-    codegen(p->suivant[1]);
+    // ca a pas l'air de regler le pb de l'ordre des conditions
+    if(p->suivant[0]->type == AST_ID && p->suivant[1]->type == AST_ID){
+        printf("cas 1\n");
+        codegenID(p->suivant[0]);
+        codegen(p->suivant[1]);
+    } else {
+        printf("cas 2\n");
+        codegen(p->suivant[1]);
+        codegen(p->suivant[0]);
+    }
+    
     //fprintf(out,"Condition droite :\n\n");
-    codegen(p->suivant[0]);
     // ex : 1 = 2
     //fprintf(out, "%d\n", ligne_act);
     //fprintf(out, "%d\n", p->codelen);
