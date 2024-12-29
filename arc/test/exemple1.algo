@@ -1,4 +1,20 @@
-MAIN()
+ALGO test_cond (x, y)
+VAR result;
 DEBUT
-	2-5*3+12;3+4*2;
+    SI x < y ALORS
+        result <- x + y;
+    SINON
+        result <- x - y;
+    FINSI
+FIN
+
+MAIN()
+VAR a;
+VAR b;
+VAR c;
+DEBUT
+    a <- 10;
+    b <- 20;
+    test_cond(a, b);
+    c <- a + b;
 FIN

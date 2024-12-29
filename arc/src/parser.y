@@ -65,7 +65,7 @@ PROGRAMME:L_FONCTION
           DECLA_VAR
           DEBUT 
             L_EXP
-          FIN {semantic($7);  PrintAst($1); PrintAst($7);  {codegenINIT();}; codegen($7);}
+          FIN {semantic($7);  PrintAst($1); PrintAst($7);  {codegenINIT();}; codegen($7); codegenEND();}
           ;
 
 DECLA_VAR: %empty   
@@ -125,7 +125,7 @@ L_PARAM_INIT : %empty {$$ = NULL;}
       ;
 
 L_ID_INIT : ID {$$ = CreerNoeudLEXP(CreerFeuilleID($1), NULL);ts_ajouter_id(TABSYMB, CTXT, $1, 0, NULL,1);}
-    | ID ',' L_ID {$$ = CreerNoeudLEXP(CreerFeuilleID($1), $3);ts_ajouter_id(TABSYMB, CTXT, $1, 0, NULL,1);}
+    | ID ',' L_ID_INIT {$$ = CreerNoeudLEXP(CreerFeuilleID($1), $3);ts_ajouter_id(TABSYMB, CTXT, $1, 0, NULL,1);}
     ;
 
 FUCNID : ID {strcpy(CTXT, $1);}

@@ -28,6 +28,7 @@ extern int PILE;
 
 void codegen(ast * p);
 void codegenINIT();
+void codegenEND();
 
 #define EMPILER(){                    \
     fprintf(out, "STORE @%d\n", 3);  /* Sauvegarde ACC au sommet de la pile */ \

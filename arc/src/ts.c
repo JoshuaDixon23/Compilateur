@@ -2,7 +2,7 @@
 
 int ts_ajouter_id(ts tabsymb, char * context, char * id, int type, ast * p, int param) {
     int i = 0;
-
+    printf("Ajout de %s dans le contexte %s\n", id, context);
     // Trouver la première position libre
     while (tabsymb[i].adresse != -1 && i < 128) {
         i++;

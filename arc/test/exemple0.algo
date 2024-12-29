@@ -1,4 +1,4 @@
-ALGO test_1 (a)
+ALGO test_1 (a,b)
 VAR f;
 DEBUT
     f <- 1;
@@ -6,11 +6,13 @@ DEBUT
 FIN
 
 MAIN()
-VAR a;
+
 VAR x;
+VAR y;
 DEBUT
 x<-2;
+y<-1;
 TQ x = 2 FAIRE
-    test_1(x);
+    test_1(x,y);
 FINTQ
 FIN

@@ -65,11 +65,22 @@ void codegenINIT() {
         }
     }
 
-    fprintf(out, "Initialisation de la pile\n\n");
+    out = fopen("a.out", "w"); // Ouvrir le fichier a.out en mode écriture
+    if (out == NULL) {
+        fprintf(stderr, "Erreur : Impossible d'ouvrir le fichier a.out\n");
+        return;
+    }
+
+    //fprintf(out, "Initialisation de la pile\n\n");
     //fprintf(out, "%d %d\n", nbVars, NB_REGISTRE);
     fprintf(out, "LOAD #%d\n", nbVars + NB_REGISTRE);
     fprintf(out, "STORE 3\n");
     ligne_act = 2;
+}
+
+void codegenEND() {
+    fprintf(out, "NOP\n");
+    fclose(out);
 }
 
 
@@ -113,6 +124,7 @@ static void codegenID(ast * p) {
         return;
     }
     int adresse = TABSYMB[index].adresse + NB_REGISTRE;
+    //fprintf(out, "var : %s\n", TABSYMB[index].id); 
     fprintf(out, "LOAD %d\n", adresse);
     EMPILER();
     ligne_act = ligne_act + 3;
@@ -215,7 +227,8 @@ static void codegenAPPEL(ast *p) {
 
     // Sauvegarde de la pile avant l'appel
     fprintf(out, "LOAD 3\n");
-    fprintf(out, "STORE 4\n"); 
+    fprintf(out, "STORE 4\n");
+    ligne_act = ligne_act + 2;
 
     // Sauvegarde du contexte actuel
     char context_debut[100];
@@ -242,8 +255,9 @@ static void codegenAPPEL(ast *p) {
                 fprintf(stderr, "Erreur : Variable inconnue %s dans le contexte %s\n", nom_id, CTXT);
                 exit(EXIT_FAILURE);
             }
-
+            
             int index_local = ts_recherche_param(TABSYMB, TABSYMB[index_fonction].id, count);
+            printf("index_local : %d\n", index_local);
             if (index_local == -1) {
                 fprintf(stderr, "Erreur : Paramètre %d introuvable dans la fonction %s\n", count, TABSYMB[index_fonction].id);
                 exit(EXIT_FAILURE);
@@ -275,4 +289,5 @@ static void codegenAPPEL(ast *p) {
     // Restauration de la pile
     fprintf(out, "LOAD 4\n");
     fprintf(out, "STORE 3\n"); 
+    ligne_act = ligne_act + 2;
 }

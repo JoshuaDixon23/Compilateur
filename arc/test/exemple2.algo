@@ -1,8 +1,21 @@
-VAR a;
-VAR b;
-VAR c;
+ALGO somme_n (m)
+VAR somme;
+VAR i;
+DEBUT
+    somme <- 0;
+    i <- 1;
+    TQ i < m FAIRE
+        somme <- somme + i;
+        i <- i + 1;
+    FINTQ
+FIN
 
 MAIN()
+VAR n;
+VAR m;
+VAR resultat;
 DEBUT
-	0;
+    n <- 10;
+    somme_n(n);
+    resultat <- n;
 FIN
