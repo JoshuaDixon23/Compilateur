@@ -2,14 +2,10 @@ MAIN()
 VAR x;
 VAR y;
 DEBUT
-x<-0;
-y<-10;
+x <- 0;
+y <- 10;
 TQ x < y FAIRE
-    SI x<5 ALORS
-        x <- x + 1;
-    SINON
-        x <- x + 2;
-    FINSI
+    x <- x + 2;
     y<-y+1;
 FINTQ
 FIN

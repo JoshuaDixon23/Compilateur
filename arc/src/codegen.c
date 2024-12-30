@@ -184,33 +184,21 @@ static void codegenFonction(ast * p) {
 }
 
 static void codegenCondition(ast * p){
-    //fprintf(out,"Condition gauche :\n\n");
-    // ca a pas l'air de regler le pb de l'ordre des conditions
-    if(p->suivant[0]->type == AST_ID && p->suivant[1]->type == AST_ID){
-        printf("cas 1\n");
-        codegenID(p->suivant[0]);
-        codegen(p->suivant[1]);
-    } else {
-        printf("cas 2\n");
-        codegen(p->suivant[1]);
-        codegen(p->suivant[0]);
-    }
+    codegenID(p->suivant[0]);
+    codegen(p->suivant[1]);
     
-    //fprintf(out,"Condition droite :\n\n");
-    // ex : 1 = 2
-    //fprintf(out, "%d\n", ligne_act);
-    //fprintf(out, "%d\n", p->codelen);
+    // ex : 1 < 2
     DEPILER();                 // 2
     fprintf(out, "DEC 3 \n");
     fprintf(out, "SUB @3\n");  // 2 - 1 = 1
     switch (p->op) {
             case '<': 
                 //fprintf(out,"%d %d\n", ligne_act+4, temp);
-                fprintf(out, "JUMG %d\n", 7+ligne_act+temp);  // Saut si ACC > 0
+                fprintf(out, "JUML %d\n", 7+ligne_act+temp);  // Saut si ACC < 0
                 fprintf(out, "NOP\n"); // Pour compenser le = 
                 break;
             case '>': 
-                fprintf(out, "JUML %d\n", 7+ligne_act+temp);  // Saut si ACC < 0
+                fprintf(out, "JUMG %d\n", 7+ligne_act+temp);  // Saut si ACC > 0
                 fprintf(out, "NOP\n"); // Pour compenser le = 
                 break;
             case '=': 
