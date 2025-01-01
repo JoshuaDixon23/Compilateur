@@ -1,10 +1,10 @@
 ALGO test_cond (x, y)
 VAR result;
 DEBUT
-    SI x < y ALORS
-        result <- x + y;
+    SI y > x ALORS
+        x <- 55;
     SINON
-        result <- x - y;
+        y <- 99;
     FINSI
 FIN
 

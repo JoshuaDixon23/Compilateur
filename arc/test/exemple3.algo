@@ -4,7 +4,7 @@ VAR y;
 DEBUT
 x <- 0;
 y <- 10;
-TQ x < y FAIRE
+TQ y < x FAIRE
     x <- x + 2;
     y<-y+1;
 FINTQ

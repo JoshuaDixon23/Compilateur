@@ -6,7 +6,6 @@ DEBUT
 FIN
 
 MAIN()
-
 VAR x;
 VAR y;
 DEBUT

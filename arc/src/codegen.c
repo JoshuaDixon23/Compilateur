@@ -184,7 +184,8 @@ static void codegenFonction(ast * p) {
 }
 
 static void codegenCondition(ast * p){
-    codegenID(p->suivant[0]);
+
+    codegen(p->suivant[0]);
     codegen(p->suivant[1]);
     
     // ex : 1 < 2
@@ -240,10 +241,19 @@ static void codegenAPPEL(ast *p) {
         exit(EXIT_FAILURE);
     }
 
-    // associe les adresses des parametres au variables d'appels
-    int count = 0;
+    // Stocker les paramètres dans une liste
+    ast *params[100]; // 100 paramètres max
+    int param_count = 0;
     ast *param = p->suivant[0];
     while (param != NULL) {
+        params[param_count++] = param;
+        param = param->suivant[1];
+    }
+
+    // Parcourir les paramètres dans l'ordre inverse
+    int count = 0;
+    for (int i = param_count - 1; i >= 0; i--) {
+        param = params[i];
         ast *param_id = param->suivant[0];
         if (param_id->type == AST_ID) {
             char *nom_id = param_id->id;
@@ -259,14 +269,14 @@ static void codegenAPPEL(ast *p) {
                 fprintf(stderr, "Erreur : Paramètre %d introuvable dans la fonction %s\n", count, TABSYMB[index_fonction].id);
                 exit(EXIT_FAILURE);
             }
-
+            printf("index_local : %s\n", TABSYMB[index_local].id);
+            printf("index_global : %s\n", TABSYMB[index_global].id);
             int index_final = ts_ajouter_id(TABSYMB, TABSYMB[index_fonction].id, TABSYMB[index_local].id, 0 ,NULL, 0);
             TABSYMB[index_final].adresse = TABSYMB[index_global].adresse;
         } else {
             fprintf(stderr, "Erreur : type inattendu\n");
             exit(EXIT_FAILURE);
         }
-        param = param->suivant[1]; // Passe au prochain paramètre
         count++;
     }
 
