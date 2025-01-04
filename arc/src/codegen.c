@@ -167,7 +167,8 @@ static void CodegenSI(ast *p) {
     codegen(p->suivant[1]);
     fprintf(out, "JUMP %d\n", ligne_act + p->suivant[2]->codelen + 1);
     ligne_act = ligne_act + 1;
-    if (p->suivant[2]) {
+    printf("p->suivant[2] : %d\n", p->suivant[2]);
+    if (p->suivant[2] != NULL) {
         codegen(p->suivant[2]);
     }
 

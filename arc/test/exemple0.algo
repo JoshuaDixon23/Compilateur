@@ -1,10 +1,8 @@
 ALGO test_cond (a, b)
 VAR result;
 DEBUT
-    SI a > b ALORS
+    SI a < b ALORS
         result <- a + b;
-    SINON
-        result <- a - b;
     FINSI
 FIN
 

@@ -54,9 +54,12 @@
 %token <nb> NB 
 %token <id> ID 
 %token '>' '<' '=' '!'
+%right AFFECT
 %left '+' '-' 
 %left '*' '/'
+
 %start PROGRAMME
+
 
 %%
 

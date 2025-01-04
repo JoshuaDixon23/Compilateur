@@ -40,13 +40,13 @@ Voici ce que vous pouvez faire avec ce langage :
 
 1. **Gestion des variables** :
    - Déclaration de variables avec le mot-clé `VAR`.
-   - Affectation de valeurs à des variables avec l'opérateur `:=`.
+   - Affectation de valeurs à des variables avec l'opérateur `<-`.
    - Support des types entiers (dans ce projet, d'autres types peuvent être ajoutés ultérieurement).
 
    Exemple :
    ```algo
    VAR x;
-   x := 5;
+   x <- 5;
    ```
 
 2. **Expressions mathématiques** :
@@ -55,7 +55,7 @@ Voici ce que vous pouvez faire avec ce langage :
 
     Exemple:
     ```algo
-    x := 5 + 3 * 2;  // Évalue à 11
+    x <- 5 + 3 * 2;  // Évalue à 11
     ```
 
 3. **Structures de contrôle** :
@@ -65,7 +65,7 @@ Voici ce que vous pouvez faire avec ce langage :
     Exemple : 
     ```algo
     TQ x > 0 FAIRE
-    x := x - 1;
+    x <- x - 1;
     FINTQ
     ```
 
@@ -75,42 +75,41 @@ Voici ce que vous pouvez faire avec ce langage :
     Exemple 1:
     ```algo
     SI x > 0 ALORS
-    y := 1;
+    y <- 1;
     FINSI
     ```
 
     Exemple 2:
     ```algo
     SI x > 0 ALORS
-    y := 1;
+    y <- 1;
     SINON
-    y := -1;
+    y <- -1;
     FINSI
     ```
 
 4. **Fonctions** :
     - Définition et appel de fonctions avec des paramètres.
-    - Les fonctions sont déclarées avec le mot-clé `ALGO` suivi d'un `ID`.
+    - Les fonctions sont déclarées avec le mot-clé `ALGO` suivi d'un `ID`, et avant le main.
+    - Les appels de fonctions ne prennent que des variables en paramètres.
 
     Exemple :
     ```algo
     ALGO somme(a, b)
     VAR res;
     DEBUT
-        res := a + b;
+        res <- a + b;
     FIN
-
-    x := somme(5, 3);  // Appelle la fonction avec les arguments 5 et 3.
     ```
 
-5. **Conditions complexes** :
+5. **Conditions** :
     - Comparaison avec les opérateurs >, <, =, et !.
     - Possibilité d'utiliser des expressions comme conditions.
 
     Exemple : 
     ```algo
     SI (x + y) > 10 ALORS
-        z := 1;
+        z <- 1;
     FINSI
     ```
 
@@ -123,9 +122,9 @@ Voici ce que vous pouvez faire avec ce langage :
     MAIN()
     VAR x, y;
     DEBUT
-        x := 5;
-        y := 10;
-        z := somme(x, y);
+        x <- 5;
+        y <- 10;
+        z <- somme(x, y);
     FIN
     ```
 
@@ -173,7 +172,7 @@ Voici une vue d'ensemble des fichiers et dossiers :
 - **/src** : Contient le code source .c du compilateur.
 - **/test** : Contient des fichiers de test pour valider les fonctionnalités.
 - **Makefile** : Automatisation des tâches.
-- **a.out** : le fichier de sortie du code compile 
+- **a.out** : le fichier de sortie du code compilé.
 
 ---
 
@@ -225,36 +224,36 @@ DEC 3
 SUB @3
 JUML 57
 NOP
-LOAD 10
-STORE @3
-INC 3
 LOAD #2
 STORE @3
 INC 3
-DEC 3
-LOAD @3
-DEC 3 
-ADD @3 
+LOAD 10
 STORE @3
 INC 3
 DEC 3
 LOAD @3
 STORE 10
-LOAD 9
-STORE @3
-INC 3
-LOAD #1
-STORE @3
-INC 3
 DEC 3
 LOAD @3
 DEC 3 
 ADD @3 
 STORE @3
 INC 3
+LOAD #1
+STORE @3
+INC 3
+LOAD 9
+STORE @3
+INC 3
 DEC 3
 LOAD @3
 STORE 9
+DEC 3
+LOAD @3
+DEC 3 
+ADD @3 
+STORE @3
+INC 3
 JUMP 14
 NOP
 ```
@@ -263,10 +262,11 @@ NOP
 - Le compilateur ne prend en charge que les types entiers pour l'instant.
 - Les chaînes de caractères et autres types de données complexes ne sont pas encore gérés.
 - Le support pour la gestion des erreurs de syntaxe est limité aux cas les plus simples.
+- Syntaxe non gérée : <=, >=, RENVOYER
 
 ## Contributeurs
 
-Ce projet a été développé par les créateurs suivants :
+Ce projet a été développé par :
 
 - **[Joshua DIXON]**
 - **[Austin LAROQUE]**

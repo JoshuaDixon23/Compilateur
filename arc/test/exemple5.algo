@@ -1,30 +1,20 @@
-ALGO est_premier (n, resultat)
+ALGO puissance (a, b, resultat)
 VAR i;
-VAR reste;
-VAR continuer;
 DEBUT
     resultat <- 1;
-    i <- 2;
-    continuer <- 1;
-    TQ i < n FAIRE
-        reste <- n;
-        TQ reste > i FAIRE
-            reste <- reste - i;
-        FINTQ
-        SI reste = i ALORS
-            resultat <- 0;
-            continuer <- 0;
-        FINSI
-        SI continuer = 1 ALORS
-            i <- i + 1;
-        FINSI
+    i <- 1;
+    TQ i < b FAIRE
+        resultat <- resultat * a;
+        i <- i + 1;
     FINTQ
 FIN
 
 MAIN()
-VAR resultat;
-VAR nombre;
+VAR base;
+VAR exposant;
+VAR res;
 DEBUT
-    nombre <- 7;
-    est_premier(nombre, resultat);
+    base <- 2;
+    exposant <- 3;
+    puissance(base, exposant, res);
 FIN
