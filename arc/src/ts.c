@@ -38,7 +38,6 @@ int ts_recherche_param(ts tabsymb, char *context, int n) {
     return -1; 
 }
 
-
 int ts_recherche_id(ts tabsymb, char * context, char * id) {
     int i = 0;
 
@@ -53,8 +52,6 @@ int ts_recherche_id(ts tabsymb, char * context, char * id) {
 
     return -1; // Non trouvé
 }
-
-
 
 void PrintTS(ts tabsymb){
     int i = 0;

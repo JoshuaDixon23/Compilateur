@@ -68,8 +68,7 @@ void semantic(ast * p){
         case AST_APPEL:
             int index = ts_recherche_id(TABSYMB, CTXT, p->id);
             semantic(TABSYMB[index].p);
-
-            p->codelen = TABSYMB[index].p->codelen + 4; // a revoir 
+            p->codelen = TABSYMB[index].p->codelen + 4;
             break;
         default:
             p->codelen = 1;

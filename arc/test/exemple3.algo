@@ -12,10 +12,9 @@ VAR x;
 VAR y;
 VAR z;
 DEBUT
-    x <- 7-1;
+    x <- 7;
     y <- 10;
     max(x, y, z);
-
     TQ z > 0 FAIRE
         z <- z - 1;
     FINTQ

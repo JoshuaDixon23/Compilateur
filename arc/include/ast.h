@@ -50,8 +50,6 @@ ast * CreerNoeudCondition(int operateur, ast * p1, ast * p2);
 ast * CreerNoeudLFonction(ast * p1, ast * p2);
 ast * CreerNoeudAppel(char* id, ast * p1);
 
-
-
 void FreeAst(ast * p);
 
 void PrintAst(ast * p);

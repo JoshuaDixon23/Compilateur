@@ -98,6 +98,7 @@ ast * CreerNoeudAFF(char * id, ast * p1){
   p->suivant[0] = p1;
   return p;
 }
+
 ast * CreerNoeudCondition(int operateur, ast * p1, ast * p2){
   ast * p;
   INIT_NOEUD(p);
@@ -108,6 +109,7 @@ ast * CreerNoeudCondition(int operateur, ast * p1, ast * p2){
   p->suivant[1] = p2;
   return p;
 }
+
 ast * CreerNoeudLFonction(ast * p1, ast * p2){
   ast * p;
   INIT_NOEUD(p);
@@ -117,6 +119,7 @@ ast * CreerNoeudLFonction(ast * p1, ast * p2){
   p->suivant[1] = p2;
   return p;
 }
+
 ast * CreerNoeudAppel(char* id, ast * p1){
   ast * p;
   INIT_NOEUD(p);
@@ -191,12 +194,14 @@ static void PrintNB(ast *p, char *indent){
   printf("%s" TXT_BOLD "Valeur: " TXT_NULL "%d\n",indent, p->valeur);
   printf("%s" TXT_BOLD "Codelen: " TXT_NULL "%d\n",indent, p->codelen);
 }
+
 static void PrintID(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_GREEN "Feuille:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
   printf("%s" TXT_BOLD "ID: " TXT_NULL "%s\n",indent, p->id);
   printf("%s" TXT_BOLD "Codelen: " TXT_NULL "%d\n",indent, p->codelen);
 }
+
 static void PrintOP(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_BLUE "Noeud:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
@@ -207,6 +212,7 @@ static void PrintOP(ast *p, char *indent){
   PrintAst(p->suivant[1]);
   profondeur--;
 }
+
 static void PrintAFF(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_BLUE "Noeud:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
@@ -216,6 +222,7 @@ static void PrintAFF(ast *p, char *indent){
   PrintAst(p->suivant[0]);
   profondeur--;
 }
+
 static void PrintLEXP(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_RED "LEXP:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
@@ -225,6 +232,7 @@ static void PrintLEXP(ast *p, char *indent){
   PrintAst(p->suivant[1]);
   profondeur--;
 }
+
 static void PrintLFONCTION(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_RED "LFONCTION:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
@@ -234,6 +242,7 @@ static void PrintLFONCTION(ast *p, char *indent){
   PrintAst(p->suivant[1]);
   profondeur--;
 }
+
 static void PrintTQ(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_BLUE "TQ:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
@@ -243,6 +252,7 @@ static void PrintTQ(ast *p, char *indent){
   PrintAst(p->suivant[1]);
   profondeur--;
 }
+
 static void PrintSI(ast *p, char *indent) {
     printf("%s" TXT_BOLD TXT_BLUE "SI:  " TXT_NULL "%p\n", indent, p);
     printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n", indent, p->type_str);
@@ -258,6 +268,7 @@ static void PrintSI(ast *p, char *indent) {
     }
     profondeur--;
 }
+
 static void PrintCONDITION(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_BLUE "CONDITION:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
@@ -268,6 +279,7 @@ static void PrintCONDITION(ast *p, char *indent){
   PrintAst(p->suivant[1]);
   profondeur--;
 }
+
 static void PrintFONCTION(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_RED "FONCTION:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
@@ -278,6 +290,7 @@ static void PrintFONCTION(ast *p, char *indent){
   PrintAst(p->suivant[1]);
   profondeur--;
 }
+
 static void PrintAPPEL(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_RED "APPEL:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);

@@ -68,7 +68,7 @@ PROGRAMME:L_FONCTION
           DECLA_VAR
           DEBUT 
             L_EXP
-          FIN {semantic($7);  PrintAst($1); PrintAst($7);  {codegenINIT();}; codegen($7); codegenEND();}
+          FIN {semantic($7);  PrintAst($1); PrintAst($7);  codegenINIT(); codegen($7); codegenEND();}
           ;
 
 DECLA_VAR: %empty   
