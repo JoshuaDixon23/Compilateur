@@ -2,10 +2,10 @@
 
 extern ts TABSYMB;
 int ligne_act = 0;
-int temp = 0;
+int taille_bloc = 0;
 extern char CTXT[32];
 
-// Prototypes des fonctions spécifiques
+// Fonctions spécifiques
 static void codegenNB(ast * p);
 static void codegenOP(ast * p);
 static void codegenID(ast * p);
@@ -13,7 +13,6 @@ static void codegenAFF(ast * p);
 static void codegenLEXP(ast * p);
 static void codegenTQ(ast * p);
 static void CodegenSI(ast *p);
-static void codegenFonction(ast * p);
 static void codegenCondition(ast * p);
 static void codegenAPPEL(ast * p);
 
@@ -39,9 +38,6 @@ void codegen(ast * p) {
             break;
         case AST_SI:
             CodegenSI(p);
-            break;
-        case AST_FONCTION:
-            codegenFonction(p);
             break;
         case AST_CONDITION:
             codegenCondition(p);
@@ -71,8 +67,6 @@ void codegenINIT() {
         return;
     }
 
-    //fprintf(out, "Initialisation de la pile\n\n");
-    //fprintf(out, "%d %d\n", nbVars, NB_REGISTRE);
     fprintf(out, "LOAD #%d\n", nbVars + NB_REGISTRE);
     fprintf(out, "STORE 3\n");
     ligne_act = 2;
@@ -82,7 +76,6 @@ void codegenEND() {
     fprintf(out, "NOP\n");
     fclose(out);
 }
-
 
 static void codegenNB(ast * p) {
     fprintf(out, "LOAD #%d\n", p->valeur);
@@ -108,6 +101,9 @@ static void codegenOP(ast * p) {
         case '/':
             fprintf(out, "DIV ");
             break;
+        case '%':
+            fprintf(out, "MOD ");
+            break;
         default:
             fprintf(stderr, "Opérateur inconnu : %c\n", p->op);
             break;
@@ -124,7 +120,6 @@ static void codegenID(ast * p) {
         return;
     }
     int adresse = TABSYMB[index].adresse + NB_REGISTRE;
-    //fprintf(out, "var : %s\n", TABSYMB[index].id); 
     fprintf(out, "LOAD %d\n", adresse);
     EMPILER();
     ligne_act = ligne_act + 3;
@@ -151,41 +146,28 @@ static void codegenLEXP(ast * p) {
 
 static void codegenTQ(ast * p) {
     int debut_tq = ligne_act;
-    temp = p->suivant[1]->codelen;
-    //fprintf(out,"Debut TQ :\n\n");
+    taille_bloc = p->suivant[1]->codelen;  // Taille du bloc tq
     codegen(p->suivant[0]); // Condition
-    //fprintf(out,"corps TQ :\n\n");
     codegen(p->suivant[1]); // Corps de la boucle
     fprintf(out, "JUMP %d\n", debut_tq); 
     ligne_act = ligne_act + 1;
 }
 
 static void CodegenSI(ast *p) {
-    temp = p->suivant[1]->codelen;
+    taille_bloc = p->suivant[1]->codelen; // Taille du bloc si
     codegen(p->suivant[0]);
 
+    // Si la condition est fausse, on saute au bloc sinon
     codegen(p->suivant[1]);
     if (p->suivant[2]) {
         fprintf(out, "JUMP %d\n", ligne_act + p->suivant[2]->codelen + 1);
         ligne_act = ligne_act + 1;
         codegen(p->suivant[2]);
     }
-    else {
+    else {      // Si pas de bloc sinon
         fprintf(out, "NOP\n");
         ligne_act = ligne_act + 1;
     }
-
-
-}
-
-
-static void codegenFonction(ast * p) {
-    // a reprendre 
-    fprintf(out, "FUNC %s:\n", p->id);
-    codegen(p->suivant[0]); // Paramètres ou déclarations locales
-    codegen(p->suivant[1]); // Corps de la fonction
-    fprintf(out, "END_FUNC\n");
-    ligne_act = ligne_act + 2;
 }
 
 static void codegenCondition(ast * p){
@@ -193,26 +175,24 @@ static void codegenCondition(ast * p){
     codegen(p->suivant[0]);
     codegen(p->suivant[1]);
     
-    // ex : 1 < 2
-    DEPILER();                 // 2
+    DEPILER();
     fprintf(out, "DEC 3 \n");
-    fprintf(out, "SUB @3\n");  // 2 - 1 = 1
+    fprintf(out, "SUB @3\n");
     switch (p->op) {
             case '<': 
-                //fprintf(out,"%d %d\n", ligne_act+4, temp);
-                fprintf(out, "JUML %d\n", 7+ligne_act+temp);  // Saut si ACC < 0
+                fprintf(out, "JUML %d\n", 7+ligne_act+taille_bloc);  // Saut si ACC < 0
                 fprintf(out, "NOP\n"); // Pour compenser le = 
                 break;
             case '>': 
-                fprintf(out, "JUMG %d\n", 7+ligne_act+temp);  // Saut si ACC > 0
+                fprintf(out, "JUMG %d\n", 7+ligne_act+taille_bloc);  // Saut si ACC > 0
                 fprintf(out, "NOP\n"); // Pour compenser le = 
                 break;
             case '=': 
-                fprintf(out, "JUMG %d\n", 7+ligne_act+temp);  // Saut si ACC > 0
-                fprintf(out, "JUML %d\n", 7+ligne_act+temp);  // Saut si ACC < 0
+                fprintf(out, "JUMG %d\n", 7+ligne_act+taille_bloc);  // Saut si ACC > 0
+                fprintf(out, "JUML %d\n", 7+ligne_act+taille_bloc);  // Saut si ACC < 0
                 break;
             case '!': 
-                fprintf(out, "JUMZ %d\n", 7+ligne_act+temp);  // Saut si ACC == 0
+                fprintf(out, "JUMZ %d\n", 7+ligne_act+taille_bloc);  // Saut si ACC == 0
                 fprintf(out, "NOP\n"); // Pour compenser le = 
                 break;
             default:
@@ -223,7 +203,6 @@ static void codegenCondition(ast * p){
 }
 
 static void codegenAPPEL(ast *p) {
-    // SAUVEGARDE //
     // sauvegarde de la ts
     ts tabsymb_backup;       
     memcpy(tabsymb_backup, TABSYMB, sizeof(ts));
@@ -236,8 +215,6 @@ static void codegenAPPEL(ast *p) {
     // Sauvegarde du contexte actuel
     char context_debut[100];
     strcpy(context_debut, CTXT);
-
-    // --------- //
 
     // Recherche de la fonction dans la table des symboles
     int index_fonction = ts_recherche_id(TABSYMB, CTXT, p->id);
@@ -255,7 +232,7 @@ static void codegenAPPEL(ast *p) {
         param = param->suivant[1];
     }
 
-    // Parcourir les paramètres dans l'ordre inverse
+    // Parcourir les paramètres et les stocker dans la table des symboles
     int count = 0;
     for (int i = param_count - 1; i >= 0; i--) {
         param = params[i];
@@ -269,13 +246,10 @@ static void codegenAPPEL(ast *p) {
             }
             
             int index_local = ts_recherche_param(TABSYMB, TABSYMB[index_fonction].id, count);
-            printf("index_local : %d\n", index_local);
             if (index_local == -1) {
                 fprintf(stderr, "Erreur : Paramètre %d introuvable dans la fonction %s\n", count, TABSYMB[index_fonction].id);
                 exit(EXIT_FAILURE);
             }
-            printf("index_local : %s\n", TABSYMB[index_local].id);
-            printf("index_global : %s\n", TABSYMB[index_global].id);
             int index_final = ts_ajouter_id(TABSYMB, TABSYMB[index_fonction].id, TABSYMB[index_local].id, 0 ,NULL, 0);
             TABSYMB[index_final].adresse = TABSYMB[index_global].adresse;
         } else {

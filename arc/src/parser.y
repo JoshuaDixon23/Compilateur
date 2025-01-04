@@ -56,7 +56,7 @@
 %token '>' '<' '=' '!'
 %right AFFECT
 %left '+' '-' 
-%left '*' '/'
+%left '*' '/' '%'
 
 %start PROGRAMME
 
@@ -106,6 +106,7 @@ EXP : EXP '+' EXP {$$ = CreerNoeudOP('+', $1, $3);}
     | EXP '-' EXP {$$ = CreerNoeudOP('-', $1, $3);}
     | EXP '*' EXP {$$ = CreerNoeudOP('*', $1, $3);}
     | EXP '/' EXP {$$ = CreerNoeudOP('/', $1, $3);}
+    | EXP '%' EXP {$$ = CreerNoeudOP('%', $1, $3);}
     | ID AFFECT EXP {$$ = CreerNoeudAFF($1, $3);}
     | '('EXP')' {$$ = $2;}
     | NB {$$ = CreerFeuilleNB($1);}

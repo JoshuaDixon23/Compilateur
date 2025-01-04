@@ -200,7 +200,7 @@ static void PrintID(ast *p, char *indent){
 static void PrintOP(ast *p, char *indent){
   printf("%s" TXT_BOLD TXT_BLUE "Noeud:  " TXT_NULL "%p\n",indent, p);
   printf("%s" TXT_BOLD "Type:   " TXT_NULL "%s\n",indent, p->type_str);
-  printf("%s" TXT_BOLD "Operateur: " TXT_NULL "%d\n",indent, p->op);
+  printf("%s" TXT_BOLD "Operateur: " TXT_NULL "%c\n",indent, p->op);
   printf("%s" TXT_BOLD "Codelen: " TXT_NULL "%d\n",indent, p->codelen);
   profondeur++;
   PrintAst(p->suivant[0]);

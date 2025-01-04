@@ -34,14 +34,14 @@ Ensuite, il génère un code machine RAM que l'on peut executer sur le simulateu
 ---
 ## Langage ALGO
 
-Voici ce que vous pouvez faire avec ce langage :
+Voici ce qu'il est possible de faire avec ce langage :
 
 ### **Fonctionnalités principales**
 
 1. **Gestion des variables** :
    - Déclaration de variables avec le mot-clé `VAR`.
    - Affectation de valeurs à des variables avec l'opérateur `<-`.
-   - Support des types entiers (dans ce projet, d'autres types peuvent être ajoutés ultérieurement).
+   - Support des types entiers.
 
    Exemple :
    ```algo
@@ -50,7 +50,7 @@ Voici ce que vous pouvez faire avec ce langage :
    ```
 
 2. **Expressions mathématiques** :
-    - Support des opérateurs arithmétiques : +, -, *, /
+    - Support des opérateurs arithmétiques : +, -, *, /, %
     - Gestion de la priorité des opérateurs grâce aux parenthèses.
 
     Exemple:
@@ -65,7 +65,7 @@ Voici ce que vous pouvez faire avec ce langage :
     Exemple : 
     ```algo
     TQ x > 0 FAIRE
-    x <- x - 1;
+        x <- x - 1;
     FINTQ
     ```
 
@@ -75,16 +75,16 @@ Voici ce que vous pouvez faire avec ce langage :
     Exemple 1:
     ```algo
     SI x > 0 ALORS
-    y <- 1;
+        y <- 1;
     FINSI
     ```
 
     Exemple 2:
     ```algo
     SI x > 0 ALORS
-    y <- 1;
+        y <- 1;
     SINON
-    y <- -1;
+        y <- -1;
     FINSI
     ```
 
@@ -137,12 +137,7 @@ Voici ce que vous pouvez faire avec ce langage :
 ---
 
 ## Installation
-1. Clonez le projet :
-    ```bash
-    git clone https://github.com/evilbutcool73/Compilo.git
-    cd mon-compilateur
-    ```
-2. Installez les dépendances :
+1. Installer les dépendances :
     ```bash
     sudo apt-get update
     sudo apt-get install flex
@@ -153,9 +148,9 @@ Voici ce que vous pouvez faire avec ce langage :
 ---
 
 ## Utilisation
-1. Pour compiler un fichier source, utilisez la commande suivante :
+1. Pour compiler un fichier source, utiliser la commande suivante :
     ```bash
-    ./bin/arc [emplacement du fichier en lanagage algo]
+    ./bin/arc [emplacement du fichier en langage algo]
     ```
     Exemple :
     ```bash
@@ -171,12 +166,21 @@ Voici une vue d'ensemble des fichiers et dossiers :
 - **/obj** : Contient le code source .o du compilateur.
 - **/src** : Contient le code source .c du compilateur.
 - **/test** : Contient des fichiers de test pour valider les fonctionnalités.
-- **Makefile** : Automatisation des tâches.
+- **Makefile** : Automatisation de la compilation.
 - **a.out** : le fichier de sortie du code compilé.
 
 ---
 
 ## Exemples
+
+Il y a plusieurs fichiers à disposition dans le fichier test pour essayer le compilateur.
+ - exemple0.algo : Tester les conditions.
+ - exemple1.algo : Fait la somme des nombres de 1 à n.
+ - exemple2.algo : Tester les fonctions.
+ - exemple3.algo : Trouve le max entre 2 nombres.
+ - exemple4.algo : Calcul la factorielle d'un nombre.
+ - exemple5.algo : Calcul la puissance d'un nombre.
+
 Voici un exemple d'entrée et de sortie pour le compilateur :
 
 ### Entrée
@@ -232,13 +236,13 @@ STORE @3
 INC 3
 DEC 3
 LOAD @3
-STORE 10
-DEC 3
-LOAD @3
 DEC 3 
 ADD @3 
 STORE @3
 INC 3
+DEC 3
+LOAD @3
+STORE 10
 LOAD #1
 STORE @3
 INC 3
@@ -247,22 +251,41 @@ STORE @3
 INC 3
 DEC 3
 LOAD @3
-STORE 9
-DEC 3
-LOAD @3
 DEC 3 
 ADD @3 
 STORE @3
 INC 3
+DEC 3
+LOAD @3
+STORE 9
 JUMP 14
 NOP
 ```
 
 ## Limitation :
-- Le compilateur ne prend en charge que les types entiers pour l'instant.
-- Les chaînes de caractères et autres types de données complexes ne sont pas encore gérés.
+- Le compilateur ne prend en charge que les types entiers.
+- Les chaînes de caractères et autres types de données complexes ne sont pas gérés.
 - Le support pour la gestion des erreurs de syntaxe est limité aux cas les plus simples.
-- Syntaxe non gérée : <=, >=, RENVOYER
+- Lexique non géré : <=, >=, LISTE, BOOLEEN, RENVOYER, COMMENTAIRE
+
+## Mémoire :
+
+La mémoire est gérée comme suit:
+```
+|  ACC          | 0  
+
+|  TMP          | 1  
+|  REG          | 2  
+|  PILE         | 3     REGISTRES  
+|  PILE_APPEL   | 4  
+|               | 5  
+|               | 6  
+|               | 8  
+
+|               | 9     VARIABLES  
+| ...           | 10  
+```
+
 
 ## Contributeurs
 

@@ -14,13 +14,13 @@
 |  TMP          | 1
 |  REG          | 2
 |  PILE         | 3     REGISTRES
-|  PILE_ APPEL  | 4
-|  RETURN_FCT   | 5
-|  LINE_ACT ?   | 6 ??
-|  ...          | 8     
-                        (NB_REGISTRE)
-|               | 9     STATIC GLOBAL
-| ...           | ?
+|  PILE_APPEL   | 4
+|               | 5
+|               | 6 
+|               | 8     
+
+|               | 9     VARIABLES
+| ...           | 10
 */
 
 extern FILE * out;

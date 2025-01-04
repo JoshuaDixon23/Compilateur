@@ -41,7 +41,6 @@ void semantic(ast * p){
             p->codelen = p->suivant[0]->codelen + 3;
             break;
         case AST_FONCTION:
-            // a revoir
             semantic(p->suivant[0]);
             semantic(p->suivant[1]);
             p->codelen = p->suivant[0]->codelen + p->suivant[1]->codelen;
