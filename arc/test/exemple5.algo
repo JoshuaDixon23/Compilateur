@@ -1,0 +1,30 @@
+ALGO est_premier (n, resultat)
+VAR i;
+VAR reste;
+VAR continuer;
+DEBUT
+    resultat <- 1;
+    i <- 2;
+    continuer <- 1;
+    TQ i < n FAIRE
+        reste <- n;
+        TQ reste > i FAIRE
+            reste <- reste - i;
+        FINTQ
+        SI reste = i ALORS
+            resultat <- 0;
+            continuer <- 0;
+        FINSI
+        SI continuer = 1 ALORS
+            i <- i + 1;
+        FINSI
+    FINTQ
+FIN
+
+MAIN()
+VAR resultat;
+VAR nombre;
+DEBUT
+    nombre <- 7;
+    est_premier(nombre, resultat);
+FIN

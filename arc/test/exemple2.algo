@@ -1,21 +1,21 @@
-ALGO somme_n (m)
-VAR somme;
-VAR i;
+ALGO addition (a, b, result)
 DEBUT
-    somme <- 0;
-    i <- 1;
-    TQ i < m FAIRE
-        somme <- somme + i;
-        i <- i + 1;
-    FINTQ
+    result <- a + b;
+FIN
+
+ALGO multiplication (a, b, result)
+DEBUT
+    result <- a * b;
 FIN
 
 MAIN()
-VAR n;
-VAR m;
-VAR resultat;
+VAR x;
+VAR y;
+VAR res_add;
+VAR res_mul;
 DEBUT
-    n <- 10;
-    somme_n(n);
-    resultat <- n;
+    x <- 5;
+    y <- 3;
+    addition(x, y, res_add);
+    multiplication(x, y, res_mul);
 FIN

@@ -1,17 +1,20 @@
-ALGO test_1 (a,b)
-VAR f;
+ALGO test_cond (a, b)
+VAR result;
 DEBUT
-    f <- 1;
-    a <- a + f;
+    SI a > b ALORS
+        result <- a + b;
+    SINON
+        result <- a - b;
+    FINSI
 FIN
 
 MAIN()
-VAR x;
-VAR y;
+VAR a;
+VAR b;
+VAR c;
 DEBUT
-x<-2;
-y<-1;
-TQ x = 2 FAIRE
-    test_1(x,y);
-FINTQ
+    a <- 10;
+    b <- 20;
+    test_cond(a, b);
+    c <- a + b;
 FIN

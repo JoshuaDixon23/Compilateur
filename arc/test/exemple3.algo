@@ -1,11 +1,22 @@
+ALGO max (a, b, max_val)
+DEBUT
+    SI a > b ALORS
+        max_val <- a;
+    SINON
+        max_val <- b;
+    FINSI
+FIN
+
 MAIN()
 VAR x;
 VAR y;
+VAR z;
 DEBUT
-x <- 0;
-y <- 10;
-TQ y < x FAIRE
-    x <- x + 2;
-    y<-y+1;
-FINTQ
+    x <- 7-1;
+    y <- 10;
+    max(x, y, z);
+
+    TQ z > 0 FAIRE
+        z <- z - 1;
+    FINTQ
 FIN

@@ -1,7 +1,19 @@
-MAIN()
-VAR x;
-VAR y;
+ALGO calcul_factorielle (n, fact)
+VAR fact;
+VAR i;
 DEBUT
-x<-1;
-y<-x+2;
+    fact <- 1;
+    i <- 1;
+    TQ i < n FAIRE
+        fact <- fact * i;
+        i <- i + 1;
+    FINTQ
+FIN
+
+MAIN()
+VAR resultat;
+VAR nombre;
+DEBUT
+    nombre <- 5;
+    calcul_factorielle(nombre, resultat);
 FIN

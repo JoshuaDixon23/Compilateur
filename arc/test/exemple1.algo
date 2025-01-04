@@ -1,20 +1,20 @@
-ALGO test_cond (x, y)
-VAR result;
+ALGO somme_n (n)
+VAR somme;
+VAR i;
 DEBUT
-    SI y > x ALORS
-        x <- 55;
-    SINON
-        y <- 99;
-    FINSI
+    somme <- 0;
+    i <- 1;
+    TQ i < n FAIRE
+        somme <- somme + i;
+        i <- i + 1;
+    FINTQ
 FIN
 
 MAIN()
-VAR a;
-VAR b;
-VAR c;
+VAR n;
+VAR resultat;
 DEBUT
-    a <- 10;
-    b <- 20;
-    test_cond(a, b);
-    c <- a + b;
+    n <- 10;
+    somme_n(n);
+    resultat <- n;
 FIN

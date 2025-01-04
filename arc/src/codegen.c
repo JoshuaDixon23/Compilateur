@@ -91,8 +91,8 @@ static void codegenNB(ast * p) {
 }
 
 static void codegenOP(ast * p) {
-    codegen(p->suivant[0]);
     codegen(p->suivant[1]);
+    codegen(p->suivant[0]);
     DEPILER();
     fprintf(out, "DEC 3 \n");
     switch (p->op) {
