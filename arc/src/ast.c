@@ -80,8 +80,7 @@ ast * CreerNoeudSI(ast *condition, ast *alors, ast *sinon) {
     strcpy(p->type_str, "SI");
     p->suivant[0] = condition;
     p->suivant[1] = alors;
-    printf("sinon : %p\n", sinon);
-    if (sinon != NULL) {
+    if (sinon) {
       p->suivant[2] = sinon;
     }
     else {
@@ -253,7 +252,7 @@ static void PrintSI(ast *p, char *indent) {
     PrintAst(p->suivant[0]);
     printf(TXT_BOLD TXT_BLUE "%sALORS:\n", indent);
     PrintAst(p->suivant[1]);
-    if (p->suivant[2] != NULL) {
+    if (p->suivant[2]) {
         printf(TXT_BOLD TXT_BLUE "%sSINON:\n", indent);
         PrintAst(p->suivant[2]);
     }

@@ -165,12 +165,16 @@ static void CodegenSI(ast *p) {
     codegen(p->suivant[0]);
 
     codegen(p->suivant[1]);
-    fprintf(out, "JUMP %d\n", ligne_act + p->suivant[2]->codelen + 1);
-    ligne_act = ligne_act + 1;
-    printf("p->suivant[2] : %d\n", p->suivant[2]);
-    if (p->suivant[2] != NULL) {
+    if (p->suivant[2]) {
+        fprintf(out, "JUMP %d\n", ligne_act + p->suivant[2]->codelen + 1);
+        ligne_act = ligne_act + 1;
         codegen(p->suivant[2]);
     }
+    else {
+        fprintf(out, "NOP\n");
+        ligne_act = ligne_act + 1;
+    }
+
 
 }
 
