@@ -90,7 +90,7 @@ Voici ce qu'il est possible de faire avec ce langage :
 
 4. **Fonctions** :
     - Définition et appel de fonctions avec des paramètres.
-    - Les fonctions sont déclarées avec le mot-clé `ALGO` suivi d'un `ID`, et avant le main.
+    - Les fonctions sont déclarées avec le mot-clé `ALGO` suivi d'un `ID`, et avant le MAIN.
     - Les appels de fonctions ne prennent que des variables en paramètres.
 
     Exemple :
@@ -113,7 +113,7 @@ Voici ce qu'il est possible de faire avec ce langage :
     FINSI
     ```
 
-6. **Expressions mathématiques** :
+6. **Structure du programme** :
     - Les programmes finnissent par une fonction principale (MAIN) où le programme est exécuté.
     - Les fonctions et les variables peuvent être déclarées globalement ou localement.
 
@@ -173,7 +173,7 @@ Voici une vue d'ensemble des fichiers et dossiers :
 
 ## Exemples
 
-Il y a plusieurs fichiers à disposition dans le fichier test pour essayer le compilateur.
+Il y a plusieurs fichiers à disposition dans le dossier test pour essayer le compilateur :
  - exemple0.algo : Tester les conditions.
  - exemple1.algo : Fait la somme des nombres de 1 à n.
  - exemple2.algo : Tester les fonctions.
@@ -194,7 +194,7 @@ x <- 0;
 y <- 10;
 TQ x < y FAIRE
     x <- x + 2;
-    y<-y+1;
+    y <- y + 1;
 FINTQ
 FIN
 ```
@@ -261,6 +261,8 @@ STORE 9
 JUMP 14
 NOP
 ```
+
+De plus, il est affiché dans le terminal, l'arbre syntaxique abstrait ainsi que la mémoire utilisée.
 
 ## Limitation :
 - Le compilateur ne prend en charge que les types entiers.
